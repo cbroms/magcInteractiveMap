@@ -1,5 +1,12 @@
 from django.contrib import admin
-from .models import Point, Tag
+from .models import Point, Tag, Map
 
-admin.site.register(Point)
-admin.site.register(Tag)
+class PointAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'id': ('short_name',)}
+
+class TagAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'id': ('name',)}
+
+admin.site.register(Point, PointAdmin)
+admin.site.register(Tag, TagAdmin)
+admin.site.register(Map)

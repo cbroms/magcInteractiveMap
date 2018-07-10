@@ -1,48 +1,60 @@
 from django.db import models
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, ValidationError
+import os
 
 # any point on the map 
 class Point(models.Model):
-    # short name used for places where we can't display too much text
+
     short_name = models.CharField(max_length=30, unique=True)
-    # long name used for all other places (optional)
     long_name = models.CharField(max_length=100, blank=True)
-    # tags from tag model (requires at least one to be selected)
+    id = models.SlugField(unique=True, primary_key=True)
     tags = models.ManyToManyField('mapApplication.Tag')
-    # summary of the point 
+
     short_description = models.TextField(null=True)
-    # longer description of the point (optional)
     long_description = models.TextField(blank=True)
-    # lat and long 
+
     latitude = models.DecimalField(null=True, max_digits=9, decimal_places=6)
     longitude = models.DecimalField(null=True, max_digits=9, decimal_places=6)
-    # main image 
+
     main_image = models.ImageField(null=True, upload_to='mainImages')
-    # additional images 
+
     additional_image1 = models.ImageField(blank=True, null=True, upload_to='otherImages')
     additional_image2 = models.ImageField(blank=True, null=True, upload_to='otherImages')
     additional_image3 = models.ImageField(blank=True, null=True, upload_to='otherImages')
     additional_image4 = models.ImageField(blank=True, null=True, upload_to='otherImages')
     additional_image5 = models.ImageField(blank=True, null=True, upload_to='otherImages')
 
-    class Meta:
-        verbose_name_plural='points'
-
     def __str__(self):
         return self.short_name
 
 # tags denote the type of points 
 class Tag(models.Model):
-    # name of the tag
+
     name = models.CharField(max_length=30, unique=True)
-    # hexadecimal color that represents the tag on the map
+    id = models.SlugField(unique=True, primary_key=True)
     color = models.CharField(max_length=7, unique=True, help_text='Enter a hexadecimal color value', validators=[
         RegexValidator(regex='^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$', message='Value is not a valid hexadecimal color')
         ])
 
-    class Meta:
-        verbose_name_plural='tags'
-
     def __str__(self):
         return self.name
 
+# the main map to be used as a background canvas to draw to
+class Map(models.Model):
+
+    image = models.ImageField(null=True, upload_to='maps')
+
+    top_right_latitude = models.DecimalField(null=True, max_digits=9, decimal_places=6)
+    top_right_longitude = models.DecimalField(null=True, max_digits=9, decimal_places=6)
+
+    top_left_latitude = models.DecimalField(null=True, max_digits=9, decimal_places=6)
+    top_left_longitude = models.DecimalField(null=True, max_digits=9, decimal_places=6)
+
+    bottom_right_latitude = models.DecimalField(null=True, max_digits=9, decimal_places=6)
+    bottom_right_longitude = models.DecimalField(null=True, max_digits=9, decimal_places=6)
+
+    bottom_left_latitude = models.DecimalField(null=True, max_digits=9, decimal_places=6)
+    bottom_left_longitude = models.DecimalField(null=True, max_digits=9, decimal_places=6)
+
+    def __str__(self):
+        return os.path.basename(self.image.name)
