@@ -4,7 +4,14 @@
     <title></title>
 </head>
 <body>
+
+{% load helpers %}
+
 Map Index: {{ map }}
+<br>
+
+<a href="{% value_in_url 'dogs' request.GET.urlencode %}"><button type="button">Dogs</button></a>
+<a href="{% value_in_url 'puckles' request.GET.urlencode %}"><button type="button">Puckles</button></a>
 
 Selections: 
 {% for tag in selections %}

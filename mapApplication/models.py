@@ -44,17 +44,10 @@ class Map(models.Model):
 
     image = models.ImageField(null=True, upload_to='maps')
 
-    top_right_latitude = models.DecimalField(null=True, max_digits=9, decimal_places=6)
-    top_right_longitude = models.DecimalField(null=True, max_digits=9, decimal_places=6)
+    right_longitude = models.DecimalField(null=True, max_digits=9, decimal_places=6, help_text='The longitude at the right side of the map')
+    left_longitude = models.DecimalField(null=True, max_digits=9, decimal_places=6, help_text='The longitude at the left side of the map')
+    bottom_latitude = models.DecimalField(null=True, max_digits=9, decimal_places=6, help_text='The latitude at the bottom of the map')
 
-    top_left_latitude = models.DecimalField(null=True, max_digits=9, decimal_places=6)
-    top_left_longitude = models.DecimalField(null=True, max_digits=9, decimal_places=6)
-
-    bottom_right_latitude = models.DecimalField(null=True, max_digits=9, decimal_places=6)
-    bottom_right_longitude = models.DecimalField(null=True, max_digits=9, decimal_places=6)
-
-    bottom_left_latitude = models.DecimalField(null=True, max_digits=9, decimal_places=6)
-    bottom_left_longitude = models.DecimalField(null=True, max_digits=9, decimal_places=6)
 
     def __str__(self):
         return os.path.basename(self.image.name)
