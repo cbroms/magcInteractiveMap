@@ -96,7 +96,7 @@ function convertGeoToPixel(latitude, longitude,
     return {x, y} // the pixel x,y value of this point on the map image
 }
 
-let res = convertGeoToPixel(37.963060, -122.554749, width, height, -122.556252, -122.553227, 37.961946);
+let res = convertGeoToPixel(37.963382, -122.555160, width, height, -122.556252, -122.553227, 37.961946);
 
 console.log(res.x);
 console.log(res.y);

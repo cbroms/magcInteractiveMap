@@ -14,11 +14,15 @@ def index(request):
             # if tag name is set to true in url
             if query: 
                 queryTags.append(slug)
+        pointObjects = Point.objects.all().values()
+        pts = []
+        for point in pointObjects:
+            pts.append(point)
     except Map.DoesNotExist:
         # if there is no map, display a service notice
         # TODO: get rid of this 404 and replace with an actual page
         raise Http404("Website under maintenance, check back later")
-    return render(request, 'map.html', {'map': mp, 'selections': queryTags})
+    return render(request, 'map.html', {'map': mp, 'selections': queryTags, 'points': pts})
 
 def details(request, id):
     pt = get_object_or_404(Point, pk=id)

@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import Point, Tag, Map
 
 class PointAdmin(admin.ModelAdmin):
+    #exclude = ['x', 'y']
     prepopulated_fields = {'id': ('short_name',)}
 
 class TagAdmin(admin.ModelAdmin):
