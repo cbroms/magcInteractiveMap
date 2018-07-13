@@ -19,6 +19,35 @@ body, html {
     {% load helpers %}
     {% load static %}
 
+    <!-- Sidebar  -->
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h3>Marin Art and Garden Center Interactive Map</h3>
+        </div>
+        <div class="container" style="padding: 10px;">
+        {% for tag in tags %}
+            {% if tag.name in selections %}
+                    <button type="button" class="btn btn-primary btn-block active" 
+                    data-toggle="button" 
+                    aria-pressed="true"
+                    onclick="window.location.href='{% value_in_url tag.id request.GET.urlencode %}'"
+                    style="background-color:{{tag.color}}; border-color:{{tag.color}}; opacity: 0.5; " 
+                    >{{ tag.name }}</button>
+            {% else %}
+                <button type="button" class="btn btn-primary btn-block" 
+                    data-toggle="button" 
+                    aria-pressed="false"
+                    onclick="window.location.href='{% value_in_url tag.id request.GET.urlencode %}'"
+                    style="background-color:{{tag.color}}; border-color:{{tag.color}}; " 
+                    >{{ tag.name }}</button>
+            {% endif %}
+        {% endfor %}
+        </div>
+    </nav>
+    <button type="button" id="sidebarCollapse" class="btn btn-info">
+        <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true">Menu</span>
+    </button>
+
     <div class='zoomable' >
         <div class="rotated" style="transform: rotate(-61deg);">
             <!-- Map -->
@@ -26,11 +55,16 @@ body, html {
             <!-- Clickable buttons drawn over map-->
             <div id="clickElements">
                 {% for point in points %}
-                    <button type="button" class="btn click" data-toggle="modal" 
+                    <button type="button" class="btn click pulse" data-toggle="modal" 
                             data-target=".popup-{{ point.id }}"
-                            style="bottom:{{ point.y|add:"-25" }}px; left:{{ point.x|add:"-25" }}px" 
+                            style="bottom:{{ point.y|add:"-25" }}px; left:{{ point.x|add:"-25" }}px;"
                             title="{{ point.short_name }}">
+                            <div class="click-center"
+                                 style="bottom:12.5px; left:12.5px;"
+                                 id="{{ point.id }}">
+                            </div>
                     </button>
+
                 {% endfor %}
             </div>
         </div>
@@ -71,6 +105,7 @@ panzoom(area);
                                 let height = {{ map.image.height | js}};
                                 let width = {{ map.image.width | js}};
                                 let points = {{ points | js}};
+                                let colors = {{ pointColors | js }}
                                 </script>
                                 <script type="text/javascript" src="{% static "map.js" %}"></script>
                                 {% endblock %}

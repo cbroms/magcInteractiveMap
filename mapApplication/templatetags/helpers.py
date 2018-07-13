@@ -12,10 +12,10 @@ def value_in_url(value, url):
         queriesSplit = url.split('&')
         for query in queriesSplit:
             if value in query:
-                return '?' + url.replace(value + '=True', '')
-        return '?' + url + '&' + value + '=True'
+                return '?' + url.replace(value + '=False', '')
+        return '?' + url + '&' + value + '=False'
     else:
-        return '?' + value + '=True'
+        return '?' + value + '=False'
 
 # json encode a python object for use in javascript
 @register.filter(is_safe=True)

@@ -23,7 +23,25 @@ $( document ).ready(function() {
             Math.ceil($(window).height() * 0.96)
         );
     }
+
+    $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('closed');
+        });
+
+    $('#sidebarCollapse').on('click', function () {
+            $('#sidebarCollapse').toggleClass('side');
+        });
+     for (key in colors) {
+        if (colors[key].length == 1) {
+            $('#' + key).css("background-color", colors[key][0]);
+        } else {
+            console.log("setting gradient");
+             $('#' + key).css({background: "linear-gradient(61deg, " + colors[key][0] +  " 0%, " + colors[key][1] + " 100%)"});
+        }
+     }
 });
+
+
 
 
 
