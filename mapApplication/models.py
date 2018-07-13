@@ -2,9 +2,23 @@ from django.db import models
 from django.core.validators import RegexValidator, ValidationError
 from .utils import geo_to_xy
 import os
+from uuid import uuid4
 
 # any point on the map 
 class Point(models.Model):
+
+    def get_image_path(path):
+        def wrapper(instance, filename):
+            ext = filename.split('.')[-1]
+            # get filename
+            if instance.pk:
+                filename = '{}.{}'.format(instance.pk, ext)
+            else:
+                # set filename as random string
+                filename = '{}.{}'.format(uuid4().hex, ext)
+            # return the whole path to the file
+            return os.path.join(path, filename)
+        return wrapper
 
     short_name = models.CharField(max_length=30, unique=True)
     long_name = models.CharField(max_length=100, blank=True)
@@ -17,13 +31,13 @@ class Point(models.Model):
     latitude = models.DecimalField(null=True, max_digits=9, decimal_places=6)
     longitude = models.DecimalField(null=True, max_digits=9, decimal_places=6)
 
-    main_image = models.ImageField(null=True, upload_to='mainImages')
+    main_image = models.ImageField(null=True, upload_to=get_image_path('0/'))
 
-    additional_image1 = models.ImageField(blank=True, null=True, upload_to='otherImages')
-    additional_image2 = models.ImageField(blank=True, null=True, upload_to='otherImages')
-    additional_image3 = models.ImageField(blank=True, null=True, upload_to='otherImages')
-    additional_image4 = models.ImageField(blank=True, null=True, upload_to='otherImages')
-    additional_image5 = models.ImageField(blank=True, null=True, upload_to='otherImages')
+    additional_image1 = models.ImageField(blank=True, null=True, upload_to=get_image_path('1/'))
+    additional_image2 = models.ImageField(blank=True, null=True, upload_to=get_image_path('2/'))
+    additional_image3 = models.ImageField(blank=True, null=True, upload_to=get_image_path('3/'))
+    additional_image4 = models.ImageField(blank=True, null=True, upload_to=get_image_path('4/'))
+    additional_image5 = models.ImageField(blank=True, null=True, upload_to=get_image_path('5/'))
 
     x = models.DecimalField(null=True, max_digits=12, decimal_places=8, blank=True)
     y = models.DecimalField(null=True, max_digits=12, decimal_places=8, blank=True)
@@ -35,6 +49,14 @@ class Point(models.Model):
         self.y = calculatedCoords['y']
         super(Point, self).save()
         super().save(*args, **kwargs)
+
+    def number_of_images(self):
+        res = 0
+        for i in range(5):
+            value = "additional_image" + str(i + 1)
+            if getattr(self, value):
+                res += 1
+        return res
 
     def __str__(self):
         return self.short_name

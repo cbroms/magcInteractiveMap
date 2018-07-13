@@ -1,9 +1,59 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ point.short_name }}</title>
-</head>
-<body>
-These are the details of {{ point.short_name }}, a point on the map. 
-</body>
-</html>
+{% extends 'base.html' %} 
+{% block head_title %}{{ point.short_name }}{% endblock %}
+{% block head %}
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+
+{% endblock %}
+
+{% block content %}
+
+    {% load static %}
+<div class="container-fluid" style="background-color:#e8ebef;">
+    <div class="container native" style="">
+        <img src="{{ point.main_image.url }}" class="img-fluid center-block main-image rounded" style="width:100%;position:sticky; top:0px;">
+
+    </div>
+    <div class="container rounded shrink">
+        <div class="faded-background center-block" style="width:{{ point.main_image.width }}px;">
+            {% if point.long_name %}
+                <h1 class="text-center" style="padding-top:25px;" >{{ point.long_name }}</h1>
+            {% else %}
+                <h1 class="text-center" style="padding-top:25px;">{{ point.short_name }}</h1>
+            {% endif %}
+        </div>
+        <div class="content-cover">
+            <br>
+            <div class="tags center-block">
+                {% for tag in point.tags.all %}
+                    <div class="btn btn-outline" style="color:{{ tag.color }}; border-color:{{ tag.color}};">{{ tag.name }}</div>
+                {% endfor %}
+            </div>
+            <br>
+            <p class="center-block paragraph">{{ point.short_description}}</p>
+            <br>
+            <div class=" slider ">
+                {% for i in images %}
+                    <div><img class="rounded" src="/media/{{ forloop.counter }}/{{ point.id }}.jpg" style="width: 100%;"></div>
+                {% endfor %}
+                
+            </div>
+            <div class="tags center-block">
+                <button class="left-btn btn" style="font-size:25px;">&larr;</button>
+                <button class="right-btn btn" style="font-size:25px;"> &rarr;</button>
+            </div>
+            <br>
+            {% if point.long_description %}
+                <p class="center-block paragraph">{{ point.long_description}}</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+{% block scripts%}
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<script type="text/javascript" src="{% static "detail.js" %}"></script>
+{% endblock %}
