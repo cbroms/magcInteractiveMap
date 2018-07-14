@@ -44,7 +44,7 @@ class Point(models.Model):
 
     # calculate the x and y position of the point 
     def save(self, *args, **kwargs):
-        calculatedCoords = geo_to_xy(self.latitude, self.longitude, Map.objects.get(pk=1))
+        calculatedCoords = geo_to_xy(self.latitude, self.longitude, Map.objects.first())
         self.x = calculatedCoords['x']
         self.y = calculatedCoords['y']
         super(Point, self).save()
@@ -84,17 +84,18 @@ class Map(models.Model):
 
     # on delete, update the points' x and y values in case map changed
     def save(self, *args, **kwargs):
-        if self.pk == 1:
-            points = Point.objects.all()
-            for point in points:
-                point.save(update_fields=['x', 'y'])
         super().save(*args, **kwargs)
-
-    # on delete, update the points' x and y values in case map changed
-    def delete(self, *args, **kwargs):
         points = Point.objects.all()
         for point in points:
             point.save(update_fields=['x', 'y'])
+        
+
+    # on delete, update the points' x and y values in case map changed
+    def delete(self, *args, **kwargs):
+        if self.pk != 1:
+            points = Point.objects.all()
+            for point in points:
+                point.save(update_fields=['x', 'y'])
         super().delete(*args, **kwargs)
 
     def __str__(self):

@@ -5,7 +5,7 @@ from django.forms.models import model_to_dict
 
 def index(request):
     try:
-        mp = Map.objects.get(pk=1) # get first map object
+        mp = Map.objects.get() # get first map object
         tagObjects = Tag.objects.all().values() # get all tag objects
         queryTagsSelected = []
         queryTags = []

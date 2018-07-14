@@ -36,7 +36,7 @@ $( document ).ready(function() {
             $('#' + key).css("background-color", colors[key][0]);
         } else {
             console.log("setting gradient");
-             $('#' + key).css({background: "linear-gradient(61deg, " + colors[key][0] +  " 0%, " + colors[key][1] + " 100%)"});
+             $('#' + key).css({background: "linear-gradient(151deg, " + colors[key][0] +  " 30%, " + colors[key][1] + " 70%)"});
         }
      }
 });
