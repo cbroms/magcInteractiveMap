@@ -14,6 +14,7 @@ $( window ).resize(function() {
 
 // on ready, set the details frames to be 90% of the window height
 $( document ).ready(function() {
+
     $(".details-frame").height(
         Math.ceil($(window).height() * 0.9)
     );
@@ -39,6 +40,10 @@ $( document ).ready(function() {
              $('#' + key).css({background: "linear-gradient(151deg, " + colors[key][0] +  " 30%, " + colors[key][1] + " 70%)"});
         }
      }
+
+     // enable all tooltips
+    $('[data-toggle="tooltip"]').tooltip()
+
 });
 
 
