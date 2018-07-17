@@ -24,11 +24,11 @@ body, html {
         <div class="sidebar-header">
             <div class="logo-title">
                 <h3>marin art & garden center</h3>
-                <hr style="border-color: #f79548; opacity: 0.15; border-width: 5px;">
             </div>
             <div class="logo-subtitle" >
-                <h3 style="font-size: 100px;">MAP</h3>
+                <h3 style="font-size: 50px;">MAP</h3>
             </div>
+            <hr style="border-color: #f79548; opacity: 0.15; border-width: 5px;">
         </div>
 
         <div class="container rounded tags-container">
@@ -40,7 +40,7 @@ body, html {
                     data-toggle="button" 
                     aria-pressed="true"
                     onclick="window.location.href='{% value_in_url tag.id request.GET.urlencode %}'"
-                    style="background-color:{{ tag.color }}80; border-color:{{ tag.color}}; opacity: 0.5; " 
+                    style="background-color:{{ tag.color }}33; border-color:{{ tag.color}}; opacity: 0.5; " 
                     >
                     <div class="custom-control custom-checkbox">
                         <input type="checkbox" class="custom-control-input" id="check-{{tag.id}}">
@@ -53,7 +53,7 @@ body, html {
                     data-toggle="button" 
                     aria-pressed="false"
                     onclick="window.location.href='{% value_in_url tag.id request.GET.urlencode %}'"
-                    style="background-color:{{ tag.color }}80; border-color:{{ tag.color}}; " 
+                    style="background-color:{{ tag.color }}33; border-color:{{ tag.color}}; " 
                     >
                     <div class="custom-control custom-checkbox">
                         <input type="checkbox" class="custom-control-input warning" id="check-{{tag.id}}" checked>
@@ -62,6 +62,9 @@ body, html {
                 </button>
             {% endif %}
         {% endfor %}
+        </div>
+        <div class="container rounded tags-container">
+            <h5 data-toggle="tooltip" data-placement="right" title="Toggle tags to filter points on the map">Help</h5>
         </div>
     </nav>
     <button type="button" id="sidebarCollapse" class="btn btn-info">

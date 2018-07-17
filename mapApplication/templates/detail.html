@@ -24,7 +24,7 @@
             <br>
             <div class="tags center-block">
                 {% for tag in point.tags.all %}
-                    <div class="btn btn-outline" style="color:{{ tag.color }}; border-color:{{ tag.color}};">{{ tag.name }}</div>
+                    <div class="btn btn-outline" style="color:{{ tag.color }}; border-color:{{ tag.color}}; cursor: default;">{{ tag.name }}</div>
                 {% endfor %}
             </div>
             <br>
@@ -37,7 +37,7 @@
                     {% endfor %}  
                 </div>
 
-                {% if images > 1 %}
+                {% if imgNum > 1 %}
                 <div class="tags center-block">
                     <button class="left-btn btn"><i class="fas fa-caret-left fa-lg"></i></button>
                     <button class="right-btn btn"><i class="fas fa-caret-right fa-lg"></i></button>

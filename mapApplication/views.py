@@ -53,4 +53,4 @@ def index(request):
 def details(request, id):
     pt = get_object_or_404(Point, pk=id)
     images = pt.number_of_images()
-    return render(request, 'detail.html', {'point': pt, 'images': range(images)})
+    return render(request, 'detail.html', {'point': pt, 'images': range(images), 'imgNum': images})

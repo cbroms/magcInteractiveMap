@@ -9,13 +9,13 @@
 }
 
 h1 {
-    font-family: "Raleway";
+    font-family: "Montserrat";
     font-weight: 700;
    /* font-style: italic;*/
 }
 
 h5 {
-    font-family: "Raleway";
+    font-family: "Montserrat";
     font-weight: 700;
     font-style: italic;
     display: inline-block;
@@ -32,15 +32,16 @@ h5 {
 }
 
 .logo-subtitle {
-    font-family: "Raleway";
+    font-family: "Berthold Akzidenz Grotesk Extended";
+    /*font-family: "Raleway";
     font-weight: 700;
-    font-style: italic;
+    font-style: italic;*/
     display: inline-block;
     position: absolute;
-    top: 6px;
-    left: 65px;
+    top: 120px;
+    right: 20px;
     color: #f79548;
-    opacity: 0.15;
+    opacity: 0.4;
 }
 
 p {
@@ -49,7 +50,9 @@ p {
 
 .btn {
     background-color: inherit;
-    font-weight: 400;
+    /*font-weight: 700;*/
+    font-style: italic;
+
 }
 
 .center-block{
@@ -65,7 +68,7 @@ p {
 
 body {
     background-color: #f7f7f7;
-    font-family: "Raleway";
+    font-family: "Montserrat";
     font-weight: 400;
 }
 
