@@ -1,7 +1,8 @@
 {% extends 'base.html' %} 
 {% block head_title %}Interactive Map{% endblock %}
 {% block head %}
-<script type="text/javascript" src="https://cdn.rawgit.com/anvaka/panzoom/v4.4.0/dist/panzoom.min.js"></script>
+<meta content='initial-scale=1.0, user-scalable=no' name='viewport'>
+
 <style type="text/css" media="screen">
 body, html {
     position: fixed;
@@ -11,9 +12,10 @@ body, html {
     margin: 0;
 }
 </style>
-
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 {% load static %}
 <script type="text/javascript" src="{% static "pace.min.js" %}"></script>
+
 <link rel="stylesheet" type="text/css" href="{% static "pace.css" %}">
 {% endblock %}
 
@@ -87,10 +89,14 @@ body, html {
         <i class="fas fa-bars"></i>
     </button>
 
-    <div class='zoomable' >
+
+
+    <div class='zoomable' height="{{ map.image.height }}px" width=" {{ map.image.width }}px" >
         <div class="rotated" style="transform: rotate(-61deg);">
             <!-- Map -->
-            <img src="{{ map.image.url }}" id="map">
+ 
+            <img src="{{ map.image.url }}" id="map" height="{{ map.image.height }}" width=" {{ map.image.width }}" >
+    
             <!-- Clickable buttons drawn over map-->
             <div id="clickElements">
                 {% for point in points %}
@@ -134,9 +140,25 @@ Selections:
 {% endblock %}
 
 {% block scripts%}
+<script type="text/javascript" src="{% static "jquery.panzoom.min.js" %}"></script>
 <script type="text/javascript">
-let area = document.querySelector('.zoomable')
-panzoom(area);
+/*let area = document.querySelector('.zoomable')
+panzoom(area);*/
+
+(function() {
+
+          var $panzoom = $('.zoomable').panzoom();
+          $panzoom.parent().on('mousewheel.focal', function( e ) {
+            e.preventDefault();
+            var delta = e.delta || e.originalEvent.wheelDelta;
+            var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
+            $panzoom.panzoom('zoom', zoomOut, {
+              increment: 0.1,
+              animate: false,
+              focal: e
+            });
+          });
+        })();
         /*panzoom(area).zoomAbs(
                                 -1100, // initial x position
                                 -1500, // initial y position
