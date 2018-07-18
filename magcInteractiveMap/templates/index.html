@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block head_title %}MAGC Interactive Map{% endblock %}
+{% block head %}
+{% load static %}
+<style type="text/css">
+ body {
+    font-family: 'Chivo';
+    background-color: #e8ebef;
+}
+.bg-img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  left: 40%;
+  background: url("{% static "cover.jpg"%}") center center no-repeat;
+  background-size: cover;
+}
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+i {
+    margin-right: 10px;
+}
+
+</style>
+<script src="https://cdn.jsdelivr.net/gh/cferdinandi/smooth-scroll@14.0.0/dist/smooth-scroll.polyfills.min.js"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="bg-img"></div>
+    
+    <div class="jumbotron-fluid" style="position: absolute; top: 10%; width: 100vw;" >
+        <div class="container" style="padding: 25px; min-width: 85%;">
+        <div class="logo-title" style="max-width:150px;">
+            <h1 style="font-family: 'Berthold Akzidenz Grotesk Extended'">marin art & garden center</h1>
+        </div>
+        <h1 style="margin-bottom: 40px; color:#4B577D;">interactive map</h1>
+        <h6 style="margin-bottom: 80px; max-width: 350px;">Learn about the history and unique features of the Marin Art & Garden Center </h6>
+        <a href="#using-the-map">
+            <button class="btn shadow" style="background-color:#4B577D; color: white;padding: 15px;">Begin →</button>
+        </a>
+        </div>
+
+    </div>
+    <div class="container" style="padding: 25px; margin-top: 10%; height: 100vh;">
+    <h2 id="using-the-map" style="color:#4B577D;">Using the Map</h2>
+    <div class="container " style="margin: 10% 0;">
+            <div class="row">
+                <div class="col-sm">
+                    <div class="outline-desc rounded">
+                    <h4><i class="fas fa-map"></i>  Navigate</h4>
+                    <h6>Scroll around the map and look for highlighted points of interest</h6>
+                    </div>
+                </div>
+                <div class="col-sm">
+                    <div class="outline-desc rounded">
+                    <h4><i class="fas fa-hand-pointer"></i>  Select</h4>
+                    <h6>Click on any point on the map to learn more about it</h6>
+                    </div>
+                </div>
+                <div class="col-sm">
+                   <div class="outline-desc rounded">
+                    <h4><i class="fas fa-tags"></i>  Filter</h4>
+                    <h6>Filter the points on the map with categories such as "Gardens"</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="/map">
+            <button class="btn shadow center-block" style="background-color: #F79548;padding: 15px;">Start Exploring! →</button>
+        </a>
+    </div>
+
+
+{% endblock %}
+
+{% block scripts%}
+<script type="text/javascript">
+var scroll = new SmoothScroll('a[href*="#"]', {speed: 1000});
+</script>
+
+{% endblock %}

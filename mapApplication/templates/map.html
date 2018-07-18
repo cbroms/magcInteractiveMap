@@ -10,14 +10,16 @@ body, html {
     padding: 0;
     margin: 0;
 }
-
 </style>
+
+{% load static %}
+<script type="text/javascript" src="{% static "pace.min.js" %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static "pace.css" %}">
 {% endblock %}
 
 {% block content %}
 
     {% load helpers %}
-    {% load static %}
 
     <!-- Sidebar  -->
     <nav id="sidebar">
@@ -25,11 +27,9 @@ body, html {
             <div class="logo-title">
                 <h3>marin art & garden center</h3>
             </div>
-            <div class="logo-subtitle" >
-                <h3 style="font-size: 50px;">MAP</h3>
-            </div>
-            <hr style="border-color: #f79548; opacity: 0.15; border-width: 5px;">
+            <h3 style="color:#4B577D;">interactive map</h3>
         </div>
+        <div class="sidebar-content">   
 
         <div class="container rounded tags-container">
             <h5 data-toggle="tooltip" data-placement="right" title="Toggle tags to filter points on the map">Filters</h5>
@@ -40,7 +40,7 @@ body, html {
                     data-toggle="button" 
                     aria-pressed="true"
                     onclick="window.location.href='{% value_in_url tag.id request.GET.urlencode %}'"
-                    style="background-color:{{ tag.color }}33; border-color:{{ tag.color}}; opacity: 0.5; " 
+                    style="background-color:{{ tag.color }}33;  opacity: 0.5; " 
                     >
                     <div class="custom-control custom-checkbox">
                         <input type="checkbox" class="custom-control-input" id="check-{{tag.id}}">
@@ -53,7 +53,7 @@ body, html {
                     data-toggle="button" 
                     aria-pressed="false"
                     onclick="window.location.href='{% value_in_url tag.id request.GET.urlencode %}'"
-                    style="background-color:{{ tag.color }}33; border-color:{{ tag.color}}; " 
+                    style="background-color:{{ tag.color }}33; " 
                     >
                     <div class="custom-control custom-checkbox">
                         <input type="checkbox" class="custom-control-input warning" id="check-{{tag.id}}" checked>
@@ -65,6 +65,22 @@ body, html {
         </div>
         <div class="container rounded tags-container">
             <h5 data-toggle="tooltip" data-placement="right" title="Toggle tags to filter points on the map">Help</h5>
+            <hr>    
+            <button type="button" class="btn btn-block" 
+                    data-toggle="button" 
+                    aria-pressed="false"
+                    onclick="window.location.href='/#using-the-map'" 
+                    style="background-color:#4B577D33;"
+                    > Using the Map →
+                </button>
+                <button type="button" class="btn btn-block" 
+                    data-toggle="button" 
+                    aria-pressed="false"
+                    onclick="window.location.href='https://magc.org/'" 
+                    style="background-color:#4B577D33;"
+                    > Home →
+                </button>
+        </div>
         </div>
     </nav>
     <button type="button" id="sidebarCollapse" class="btn btn-info">
@@ -81,10 +97,11 @@ body, html {
                     <button type="button" class="btn click pulse" data-toggle="modal" 
                             data-target=".popup-{{ point.id }}"
                             style="bottom:{{ point.y|add:"-25" }}px; left:{{ point.x|add:"-25" }}px;"
-                            title="{{ point.short_name }}">
+                            >
                             <div class="click-center"
                                  style="bottom:12.5px; left:12.5px;"
-                                 id="{{ point.id }}">
+                                 id="{{ point.id }}"
+                                 data-toggle="tooltip" data-placement="bottom" title="{{ point.short_name }}">
                             </div>
                     </button>
 

@@ -29,7 +29,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -56,14 +55,10 @@ ROOT_URLCONF = 'magcInteractiveMap.urls'
 
 SETTINGS_PATH = os.path.dirname(os.path.dirname(__file__))
 
-TEMPLATE_DIRS = (
-    os.path.join(SETTINGS_PATH, 'templates'),
-)
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'magcInteractiveMap/templates'),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

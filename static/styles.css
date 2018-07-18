@@ -8,23 +8,52 @@
     src: url("fonts/Berthold-Akzidenz-Grotesk-Extended.otf") format("opentype");
 }
 
+body {
+    font-family: "Chivo";
+    background-color: #f7f7f7;
+}
+
 h1 {
-    font-family: "Montserrat";
+    font-family: "Chivo";
     font-weight: 700;
    /* font-style: italic;*/
 }
 
 h5 {
-    font-family: "Montserrat";
+    font-family: "Chivo";
     font-weight: 700;
-    font-style: italic;
+/*    font-style: italic;*/
     display: inline-block;
     cursor: help;
     margin-bottom: none;
+    color:#4B577D;
+}
+
+h6 {
+    margin: 20px 0;
+}
+
+.bg-img:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-image: linear-gradient(to top right, #8AAAD9, #F79548);
+  opacity: .8;
+}
+
+.outline-desc {
+    padding: 20px;
+    /*border: 1px solid black;*/
+    text-align: center;
+    /*background-color: #4B577D;
+    color: white;*/
 }
 
 .logo-title {
-    font-family: "Berthold Akzidenz Grotesk Extended";
+    font-family: "Berthold Akzidenz Grotesk Extended" !important;
     max-width: 95px;
     display: inline-block;
     position: inherit;
@@ -41,7 +70,7 @@ h5 {
     top: 120px;
     right: 20px;
     color: #f79548;
-    opacity: 0.4;
+    opacity: 1;
 }
 
 p {
@@ -51,7 +80,7 @@ p {
 .btn {
     background-color: inherit;
     /*font-weight: 700;*/
-    font-style: italic;
+    /*font-style: italic;*/
 
 }
 
@@ -64,12 +93,6 @@ p {
     position: relative;
     margin: 0;
     background-color: inherit;
-}
-
-body {
-    background-color: #f7f7f7;
-    font-family: "Montserrat";
-    font-weight: 400;
 }
 
 .paragraph {
@@ -109,6 +132,10 @@ body {
 }
 
 .native {
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.shadow {
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 }
 
@@ -217,8 +244,8 @@ iframe{
     z-index: 101;
     top: 15px;
     left: 310px;
-    background-color: #f79548;
-    border-color: #ba6d31;
+    background-color: #4B577D;
+    border: none;
     transition: all 0.3s;
 }
 
@@ -239,10 +266,15 @@ iframe{
     background: #e8ebef;
     transition: all 0.3s;
     position: fixed;
-    height: 100vh;
+    min-height: 100vh;
+    height: auto;
     z-index: 100;
 }
 
+.sidebar-content {
+    overflow-y: scroll;
+    height: 600px;
+}
 .tags-container {
     width: 260px;
     margin: 15px;
