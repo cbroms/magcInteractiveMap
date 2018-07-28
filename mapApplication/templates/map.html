@@ -1,7 +1,6 @@
 {% extends 'base.html' %} 
 {% block head_title %}Interactive Map{% endblock %}
 {% block head %}
-<meta content='initial-scale=1.0, user-scalable=no' name='viewport'>
 
 <style type="text/css" media="screen">
 body, html {
@@ -90,12 +89,14 @@ body, html {
     </button>
 
 
-
-    <div class='zoomable' height="{{ map.image.height }}px" width=" {{ map.image.width }}px" >
+    <div class="parent" style="overflow: hidden;
+    position: relative;
+">
+    <div class='zoomable' >
         <div class="rotated" style="transform: rotate(-61deg);">
             <!-- Map -->
  
-            <img src="{{ map.image.url }}" id="map" height="{{ map.image.height }}" width=" {{ map.image.width }}" >
+            <img src="{{ map.image.url }}" id="map" height="{{ map.image.height }}px" width=" {{ map.image.width }}px" >
     
             <!-- Clickable buttons drawn over map-->
             <div id="clickElements">
@@ -115,6 +116,7 @@ body, html {
             </div>
         </div>
     </div>
+    </div>
     <!-- Popup windows for each point on the map-->
     {% for point in points %}
         <div class="modal fade popup-{{ point.id }}" tabindex="-1" role="dialog" aria-hidden="true">
@@ -128,15 +130,7 @@ body, html {
             </div>
         </div>
     {% endfor %}
-    <!--
-    <a href="{% value_in_url 'dogs' request.GET.urlencode %}"><button type="button">Dogs</button></a>
-<a href="{% value_in_url 'puckles' request.GET.urlencode %}"><button type="button">Puckles</button></a>
 
-Selections: 
-{% for tag in selections %}
-    <p>{{ tag }}</p>
-{% endfor %}
--->
 {% endblock %}
 
 {% block scripts%}
@@ -164,10 +158,10 @@ panzoom(area);*/
                                 -1500, // initial y position
                                 0.5  // initial zoom 
                                 );*/
-                                let height = {{ map.image.height | js}};
-                                let width = {{ map.image.width | js}};
-                                let points = {{ points | js}};
-                                let colors = {{ pointColors | js }}
-                                </script>
-                                <script type="text/javascript" src="{% static "map.js" %}"></script>
-                                {% endblock %}
+ let height = {{ map.image.height | js}};
+ let width = {{ map.image.width | js}};
+ let points = {{ points | js}};
+ let colors = {{ pointColors | js }}
+</script>
+<script type="text/javascript" src="{% static "map.js" %}"></script>
+{% endblock %}

@@ -44,6 +44,11 @@ $( document ).ready(function() {
      // enable all tooltips
     $('[data-toggle="tooltip"]').tooltip()
 
+    // make links work in pan area
+    $('.zoomable a').on('mousedown touchstart', function( e ) {
+        e.stopImmediatePropagation();
+    });
+
 });
 
 
