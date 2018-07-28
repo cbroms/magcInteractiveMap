@@ -1,24 +1,35 @@
 from django.db import models
 from django.core.validators import RegexValidator, ValidationError
+from django.utils.deconstruct import deconstructible
 from .utils import geo_to_xy
 import os
 from uuid import uuid4
 
+@deconstructible
+class PathRename(object):
+    def __init__(self, sub_path):
+        self.path = sub_path
+
+    def __call__(self, instance, filename):
+        ext = filename.split('.')[-1]
+        # get filename
+        if instance.pk:
+            filename = '{}.{}'.format(instance.pk, ext)
+        else:
+            # set filename as random string
+            filename = '{}.{}'.format(uuid4().hex, ext)
+        # return the whole path to the file
+        return os.path.join(path, filename)
+
+rename0 = PathRename("0/")
+rename1 = PathRename("1/")
+rename2 = PathRename("2/")
+rename3 = PathRename("3/")
+rename4 = PathRename("4/")
+rename5 = PathRename("5/")
+
 # any point on the map 
 class Point(models.Model):
-
-    def get_image_path(path):
-        def wrapper(instance, filename):
-            ext = filename.split('.')[-1]
-            # get filename
-            if instance.pk:
-                filename = '{}.{}'.format(instance.pk, ext)
-            else:
-                # set filename as random string
-                filename = '{}.{}'.format(uuid4().hex, ext)
-            # return the whole path to the file
-            return os.path.join(path, filename)
-        return wrapper
 
     short_name = models.CharField(max_length=30, unique=True)
     long_name = models.CharField(max_length=100, blank=True)
@@ -31,13 +42,13 @@ class Point(models.Model):
     latitude = models.DecimalField(null=True, max_digits=9, decimal_places=6)
     longitude = models.DecimalField(null=True, max_digits=9, decimal_places=6)
 
-    main_image = models.ImageField(null=True, upload_to=get_image_path('0/'))
+    main_image = models.ImageField(null=True, upload_to=rename0)
 
-    additional_image1 = models.ImageField(blank=True, null=True, upload_to=get_image_path('1/'))
-    additional_image2 = models.ImageField(blank=True, null=True, upload_to=get_image_path('2/'))
-    additional_image3 = models.ImageField(blank=True, null=True, upload_to=get_image_path('3/'))
-    additional_image4 = models.ImageField(blank=True, null=True, upload_to=get_image_path('4/'))
-    additional_image5 = models.ImageField(blank=True, null=True, upload_to=get_image_path('5/'))
+    additional_image1 = models.ImageField(blank=True, null=True, upload_to=rename1)
+    additional_image2 = models.ImageField(blank=True, null=True, upload_to=rename2)
+    additional_image3 = models.ImageField(blank=True, null=True, upload_to=rename3)
+    additional_image4 = models.ImageField(blank=True, null=True, upload_to=rename4)
+    additional_image5 = models.ImageField(blank=True, null=True, upload_to=rename5)
 
     x = models.DecimalField(null=True, max_digits=12, decimal_places=8, blank=True)
     y = models.DecimalField(null=True, max_digits=12, decimal_places=8, blank=True)
