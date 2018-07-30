@@ -2,6 +2,13 @@
 {% block head_title %}{{ point.short_name }}{% endblock %}
 {% block head %}
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+
+<style type="text/css">
+    h1 {
+        max-width: 550px;
+        margin: auto !important;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -10,15 +17,16 @@
 <div class="container-fluid" style="background-color:#e8ebef;">
     <div class="container native" style="">
         <img src="{{ point.main_image.url }}" class="img-fluid center-block main-image rounded" style="width:100%;position:sticky; top:0px;">
-
     </div>
-    <div class="container rounded shrink">
+    <div class="container rounded shrink shadow">
         <div class="faded-background center-block" style="width:{{ point.main_image.width }}px;"></div>
-        {% if point.long_name %}
+        <div class="back-fill" style="background-color: #f7f7f7; margin: 0; position: relative;">
+            {% if point.long_name %}
                 <h1 class="text-center" >{{ point.long_name }}</h1>
             {% else %}
                 <h1 class="text-center">{{ point.short_name }}</h1>
             {% endif %}
+        </div>
         <div class="content-cover">
             <br>
             <div class="tags center-block">

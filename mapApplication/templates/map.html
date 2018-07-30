@@ -9,12 +9,12 @@ body, html {
     height: 100%;
     padding: 0;
     margin: 0;
+    background-color: #dde5d3;
 }
 </style>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 {% load static %}
 <script type="text/javascript" src="{% static "pace.min.js" %}"></script>
-
 <link rel="stylesheet" type="text/css" href="{% static "pace.css" %}">
 {% endblock %}
 
@@ -33,39 +33,48 @@ body, html {
         <div class="sidebar-content">   
 
         <div class="container rounded tags-container">
-            <h5 data-toggle="tooltip" data-placement="right" title="Toggle tags to filter points on the map">Filters</h5>
+            <h5>Filters</h5>
             <hr>
         {% for tag in tags %}
             {% if tag.name in selections %}
-                    <button type="button" class="btn btn-block active" 
+            <div class="button-group">
+            <button type="button" class="btn active" 
                     data-toggle="button" 
                     aria-pressed="true"
                     onclick="window.location.href='{% value_in_url tag.id request.GET.urlencode %}'"
-                    style="background-color:{{ tag.color }}33;  opacity: 0.5; " 
-                    >
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="check-{{tag.id}}">
-                        <label class="custom-control-label" for="check-{{tag.id}}">{{ tag.name }}</label>
-                    </div>
+                    style="background-color:{{ tag.color }}33;opacity: 0.4;" 
+                    ><i class="fas fa-plus"></i>
                 </button>
+                    <button type="button" class="btn active  " 
+                    data-toggle="button" 
+                    aria-pressed="true"
+                    onclick="window.location.href='{% value_in_url tag.id request.GET.urlencode %}'"
+                    style="background-color:{{ tag.color }}33;  opacity: 0.4; width: 180px;" 
+                    >
+                    {{tag.name}}
+                </button>
+            </div>
             {% else %}
-
-                <button type="button" class="btn btn-block" 
+             <button type="button" class="btn" 
+                    data-toggle="button" 
+                    aria-pressed="true"
+                    onclick="window.location.href='{% value_in_url tag.id request.GET.urlencode %}'"
+                    style="background-color:{{ tag.color }}33; width: 40px; " 
+                    ><i class="fas fa-times"></i>
+                </button>
+                <button type="button" class="btn" 
                     data-toggle="button" 
                     aria-pressed="false"
                     onclick="window.location.href='{% value_in_url tag.id request.GET.urlencode %}'"
-                    style="background-color:{{ tag.color }}33; " 
+                    style="background-color:{{ tag.color }}33; width: 180px;" 
                     >
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input warning" id="check-{{tag.id}}" checked>
-                        <label class="custom-control-label" for="check-{{tag.id}}">{{ tag.name }}</label>
-                    </div>
+                    {{tag.name}}
                 </button>
             {% endif %}
         {% endfor %}
         </div>
         <div class="container rounded tags-container">
-            <h5 data-toggle="tooltip" data-placement="right" title="Toggle tags to filter points on the map">Help</h5>
+            <h5>Help</h5>
             <hr>    
             <button type="button" class="btn btn-block" 
                     data-toggle="button" 
@@ -79,7 +88,7 @@ body, html {
                     aria-pressed="false"
                     onclick="window.location.href='https://magc.org/'" 
                     style="background-color:#4B577D33;"
-                    > Home →
+                    > MAGC Home →
                 </button>
         </div>
         </div>
@@ -95,11 +104,10 @@ body, html {
     <div class='zoomable' >
         <div class="rotated" style="transform: rotate(-61deg);">
             <!-- Map -->
- 
-            <img src="{{ map.image.url }}" id="map" height="{{ map.image.height }}px" width=" {{ map.image.width }}px" >
+            <img src="{% static "map.png"%}" id="map" class="hidden" height="{{ map.image.height }}px" width=" {{ map.image.width }}px" >
     
             <!-- Clickable buttons drawn over map-->
-            <div id="clickElements">
+            <div id="clickElements" class="hidden">
                 {% for point in points %}
                     <button type="button" class="btn click pulse" data-toggle="modal" 
                             data-target=".popup-{{ point.id }}"
@@ -139,20 +147,9 @@ body, html {
 /*let area = document.querySelector('.zoomable')
 panzoom(area);*/
 
-(function() {
+  let $panzoom = $('.zoomable').panzoom();
+          
 
-          var $panzoom = $('.zoomable').panzoom();
-          $panzoom.parent().on('mousewheel.focal', function( e ) {
-            e.preventDefault();
-            var delta = e.delta || e.originalEvent.wheelDelta;
-            var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
-            $panzoom.panzoom('zoom', zoomOut, {
-              increment: 0.1,
-              animate: false,
-              focal: e
-            });
-          });
-        })();
         /*panzoom(area).zoomAbs(
                                 -1100, // initial x position
                                 -1500, // initial y position

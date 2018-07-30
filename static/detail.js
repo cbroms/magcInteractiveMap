@@ -1,19 +1,29 @@
 $(window).resize(function() {
     $(".faded-background").width(
         Math.ceil($(".main-image").width())
-        );
+      );
     $(".shrink").width(
         Math.ceil($(".native").width())
-        );
+      );
+
+    $(".back-fill").width(
+        Math.ceil($(".native").width())
+    );
 });
 
 $(document).ready(function() {
+
     $(".faded-background").width(
         Math.ceil($(".main-image").width())
-        );
+      );
+
     $(".shrink").width(
         Math.ceil($(".native").width())
-        );
+      );
+    
+    $(".back-fill").width(
+        Math.ceil($(".native").width())
+      );
 
     // initialize the carousel element 
     $('.slider').slick({

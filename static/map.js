@@ -32,6 +32,7 @@ $( document ).ready(function() {
     $('#sidebarCollapse').on('click', function () {
             $('#sidebarCollapse').toggleClass('side');
         });
+
      for (key in colors) {
         if (colors[key].length == 1) {
             $('#' + key).css("background-color", colors[key][0]);
@@ -45,14 +46,36 @@ $( document ).ready(function() {
     $('[data-toggle="tooltip"]').tooltip()
 
     // make links work in pan area
-    $('.zoomable a').on('mousedown touchstart', function( e ) {
+    $('.zoomable a').on('mousedown touchstart', function(e) {
+        console.log("touch");
         e.stopImmediatePropagation();
+    });
+
+    // set the map to the center
+    $panzoom.panzoom("setMatrix", [ 0, 0, 0, 0, -220, -1085 ]);
+    // zoom out by default
+    $panzoom.panzoom("zoom", 0.3, { silent: true });
+
+
+    // listen for mousewheel to zoom
+    $panzoom.parent().on('mousewheel.focal', function(e) {
+
+        e.preventDefault();
+        let delta = e.delta || e.originalEvent.wheelDelta;
+        let zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
+
+        $panzoom.panzoom('zoom', zoomOut, {
+            increment: 0.1,
+            animate: false,
+            focal: e
+        });
     });
 
 });
 
-
-
-
-
+// reveal the map and points after loading is complete
+Pace.on("done", () => {
+    $("#map").removeClass("hidden");
+    $("#clickElements").removeClass("hidden");
+});
 
