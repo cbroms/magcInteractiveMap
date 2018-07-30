@@ -19,7 +19,7 @@ class PathRename(object):
             # set filename as random string
             filename = '{}.{}'.format(uuid4().hex, ext)
         # return the whole path to the file
-        return os.path.join(path, filename)
+        return os.path.join(self.path, filename)
 
 rename0 = PathRename("0/")
 rename1 = PathRename("1/")
