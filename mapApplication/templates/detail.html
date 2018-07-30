@@ -8,6 +8,9 @@
         max-width: 550px;
         margin: auto !important;
     }
+    html, body {
+        background-color: #e8ebef;
+    }
 </style>
 {% endblock %}
 
@@ -18,7 +21,7 @@
     <div class="container native" style="">
         <img src="{{ point.main_image.url }}" class="img-fluid center-block main-image rounded" style="width:100%;position:sticky; top:0px;">
     </div>
-    <div class="container rounded shrink shadow">
+    <div class="container rounded shrink shadow" style="margin-bottom: 20px;">
         <div class="faded-background center-block" style="width:{{ point.main_image.width }}px;"></div>
         <div class="back-fill" style="background-color: #f7f7f7; margin: 0; position: relative;">
             {% if point.long_name %}
@@ -27,7 +30,7 @@
                 <h1 class="text-center">{{ point.short_name }}</h1>
             {% endif %}
         </div>
-        <div class="content-cover">
+        <div class="content-cover rounded">
             <br>
             <div class="tags center-block">
                 {% for tag in point.tags.all %}

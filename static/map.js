@@ -52,9 +52,9 @@ $( document ).ready(function() {
     });
 
     // set the map to the center
-    $panzoom.panzoom("setMatrix", [ 0, 0, 0, 0, -220, -1085 ]);
+    //$panzoom.panzoom("setMatrix", [ 0, 0, 0, 0, -220, -1085 ]);
     // zoom out by default
-    $panzoom.panzoom("zoom", 0.3, { silent: true });
+    //$panzoom.panzoom("zoom", 0.3, { silent: true });
 
 
     // listen for mousewheel to zoom

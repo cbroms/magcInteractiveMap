@@ -98,9 +98,7 @@ body, html {
     </button>
 
 
-    <div class="parent" style="overflow: hidden;
-    position: relative;
-">
+    <div class="parent" style="overflow: hidden; position: relative;">
     <div class='zoomable' >
         <div class="rotated" style="transform: rotate(-61deg);">
             <!-- Map -->
@@ -143,18 +141,22 @@ body, html {
 
 {% block scripts%}
 <script type="text/javascript" src="{% static "jquery.panzoom.min.js" %}"></script>
+<script src="https://cdn.rawgit.com/anvaka/panzoom/v4.4.0/dist/panzoom.min.js"></script>
 <script type="text/javascript">
-/*let area = document.querySelector('.zoomable')
-panzoom(area);*/
 
-  let $panzoom = $('.zoomable').panzoom();
+
+let area = document.querySelector('.zoomable')
+panzoom(area, {
+    maxZoom: 0.8,
+    minZoom: 0.2,
+    zoomSpeed: 0.05
+}).zoomAbs(300, 0, 0.3  );
+
+ // let $panzoom = $('.zoomable').panzoom();
           
 
-        /*panzoom(area).zoomAbs(
-                                -1100, // initial x position
-                                -1500, // initial y position
-                                0.5  // initial zoom 
-                                );*/
+        //panzoom(area).zoomAbs(-1100, -1500, 0.5  );
+
  let height = {{ map.image.height | js}};
  let width = {{ map.image.width | js}};
  let points = {{ points | js}};
