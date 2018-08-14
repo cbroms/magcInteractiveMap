@@ -51,6 +51,7 @@ $( document ).ready(function() {
         e.stopImmediatePropagation();
     });
 
+
     // set the map to the center
     //$panzoom.panzoom("setMatrix", [ 0, 0, 0, 0, -220, -1085 ]);
     // zoom out by default
@@ -77,5 +78,10 @@ $( document ).ready(function() {
 Pace.on("done", () => {
     $("#map").removeClass("hidden");
     $("#clickElements").removeClass("hidden");
+
+    if ($('.popup-' + open ).length > 0) {
+        // open a modal by default if requested in url
+        $('.popup-' + open ).modal('show')
+    }
 });
 

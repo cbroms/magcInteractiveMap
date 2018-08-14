@@ -58,6 +58,28 @@
             {% if point.long_description %}
                 <p class="center-block paragraph">{{ point.long_description}}</p>
             {% endif %}
+
+                <button type="button" class="btn " id="share" 
+                    data-toggle="button" 
+                    aria-pressed="false"
+                    onclick="displayShare()" 
+                    style="background-color:#4B577D33; width: 200px; display: block; margin: 0 auto;"
+                    > Share this page 
+            </button>
+            <br>
+
+            <div class="container text-center" id="share-details" style="visibility: hidden; background-color:#4B577D33;">
+                <div style="padding: 10px;">
+                <p>Short Link <em>(click to copy)</em> <br> <span id="loc" class="copyable"><b>{{ request.get_host }}/map/?{{ point.id }}=open</b></span></p>
+                <p>QR Code <em>(click to copy)</em></p>
+                <div id="qrcode" class="copyable" style="margin: 0 auto;"></div>
+                </div>
+            </div>
+
+            <br>
+
+
+
         </div>
     </div>
 </div>
@@ -66,5 +88,7 @@
 
 {% block scripts%}
 <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<script type="text/javascript" src="{% static "qrcode.min.js" %}"></script>
 <script type="text/javascript" src="{% static "detail.js" %}"></script>
+
 {% endblock %}
