@@ -2,6 +2,7 @@
 {% block head_title %}Interactive Map{% endblock %}
 {% block head %}
 
+
 <style type="text/css" media="screen">
 body, html {
     position: fixed;
@@ -16,6 +17,7 @@ body, html {
 {% load static %}
 <script type="text/javascript" src="{% static "pace.min.js" %}"></script>
 <link rel="stylesheet" type="text/css" href="{% static "pace.css" %}">
+<script type="text/javascript" src="{% static "inobounce.min.js" %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -108,7 +110,11 @@ body, html {
             <div id="clickElements" class="hidden">
                 {% for point in points %}
                     <button type="button" class="btn click pulse" data-toggle="modal" 
-                            data-target=".popup-{{ point.id }}"
+                            {% if frames %}
+                                data-target=".popup-{{ point.id }}"
+                            {% else %}
+                                onclick="location.href='details/{{ point.id }}';"
+                            {% endif %}
                             style="bottom:{{ point.y|add:"-25" }}px; left:{{ point.x|add:"-25" }}px;"
                             >
                             <div class="click-center"
@@ -123,7 +129,8 @@ body, html {
         </div>
     </div>
     </div>
-    <!-- Popup windows for each point on the map-->
+    <!-- Popup windows for each point on the map (only if not mobile/tablet to speed up page) -->
+    {% if frames %}
     {% for point in points %}
         <div class="modal fade popup-{{ point.id }}" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
@@ -136,6 +143,9 @@ body, html {
             </div>
         </div>
     {% endfor %}
+   
+
+    {% endif %}
 
 {% endblock %}
 
@@ -143,25 +153,13 @@ body, html {
 <script type="text/javascript" src="{% static "jquery.panzoom.min.js" %}"></script>
 <script src="https://cdn.rawgit.com/anvaka/panzoom/v4.4.0/dist/panzoom.min.js"></script>
 <script type="text/javascript">
-
-
-let area = document.querySelector('.zoomable')
-panzoom(area, {
-    maxZoom: 0.8,
-    minZoom: 0.2,
-    zoomSpeed: 0.05
-}).zoomAbs(300, 0, 0.3  );
-
- // let $panzoom = $('.zoomable').panzoom();
-          
-
-        //panzoom(area).zoomAbs(-1100, -1500, 0.5  );
-
- let height = {{ map.image.height | js}};
- let width = {{ map.image.width | js}};
- let points = {{ points | js}};
- let colors = {{ pointColors | js }}
- let open = {{ open | js }}
+    // variables passed from view encoded for javascript
+    let height = {{ map.image.height | js}};
+    let width = {{ map.image.width | js}};
+    let points = {{ points | js}};
+    let colors = {{ pointColors | js }};
+    let open = {{ open | js }};
+    let frames = {{ frames | js }};
  
 </script>
 <script type="text/javascript" src="{% static "map.js" %}"></script>

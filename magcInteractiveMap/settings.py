@@ -27,7 +27,7 @@ SECRET_KEY = 'j6f6%a8_zg#r!o10s!0^j^==y^+y5ub6@nff5*nphm*!9pcn4g'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['e0c61e48.ngrok.io', 'localhost']
+ALLOWED_HOSTS = ['1cfe86d1.ngrok.io', 'localhost']
 
 # Application definition
 
@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'mapApplication.apps.MapapplicationConfig'
+    'mapApplication.apps.MapapplicationConfig',
+    'django_user_agents',
 ]
 
 MIDDLEWARE = [
@@ -49,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_user_agents.middleware.UserAgentMiddleware',
 ]
 
 ROOT_URLCONF = 'magcInteractiveMap.urls'

@@ -23,7 +23,6 @@ def index(request):
         pointObjects = Point.objects.all()
         pts = []
         colors = {}
-
         # if there is an id in the url, pass that value to open it by default
         openId = ''
 
@@ -52,11 +51,21 @@ def index(request):
                     # if the tag is not disabled
                     if tag.name not in badTags:
                         colors[point.id].append(tag.color) 
+        showIFrames = True 
+        if request.user_agent.is_mobile or request.user_agent.is_tablet:
+            showIFrames = False
+
     except Map.DoesNotExist:
         # if there is no map, display a service notice
         # TODO: get rid of this 404 and replace with an actual page
         raise Http404("Website under maintenance, check back later")
-    return render(request, 'map.html', {'map': mp, 'selections': queryTagsSelected, 'tags': queryTags, 'points': pts, 'pointColors': colors, 'open': openId, })
+    return render(request, 'map.html', {'map': mp, 
+                                        'selections': queryTagsSelected,
+                                        'tags': queryTags, 
+                                        'points': pts, 
+                                        'pointColors': colors, 
+                                        'open': openId,
+                                        'frames': showIFrames,})
 
 def details(request, id):
     pt = get_object_or_404(Point, pk=id)

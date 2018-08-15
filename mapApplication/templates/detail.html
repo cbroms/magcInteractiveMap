@@ -1,7 +1,9 @@
 {% extends 'base.html' %} 
 {% block head_title %}{{ point.short_name }}{% endblock %}
 {% block head %}
+<meta name="viewport" content="initial-scale=1.0" />
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+
 
 <style type="text/css">
     h1 {
@@ -65,7 +67,7 @@
                     onclick="displayShare()" 
                     style="background-color:#4B577D33; width: 200px; display: block; margin: 0 auto;"
                     > Share this page 
-            </button>
+                </button>
             <br>
 
             <div class="container text-center" id="share-details" style="visibility: hidden; background-color:#4B577D33;">

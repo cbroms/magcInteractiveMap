@@ -1,55 +1,111 @@
 
-// on resize, set the details frames to be 90% of the window height
+
 $( window ).resize(function() {
     $(".details-frame").height(
         Math.ceil($(window).height() * 0.9)
-    );
+        );
     // set to 98% height for mobile
     if ($(window).width() <= 480) {
         $(".details-frame").height(
             Math.ceil($(window).height() * 0.96)
-        );
+            );
     }
 });
 
-// on ready, set the details frames to be 90% of the window height
+
 $( document ).ready(function() {
 
     $(".details-frame").height(
         Math.ceil($(window).height() * 0.9)
-    );
+        );
     // set to 98% height for mobile
     if ($(window).width() <= 480) {
         $(".details-frame").height(
             Math.ceil($(window).height() * 0.96)
-        );
+            );
     }
 
     $('#sidebarCollapse').on('click', function () {
-            $('#sidebar').toggleClass('closed');
-        });
+        $('#sidebar').toggleClass('closed');
+    });
 
     $('#sidebarCollapse').on('click', function () {
-            $('#sidebarCollapse').toggleClass('side');
-        });
+        $('#sidebarCollapse').toggleClass('side');
+    });
 
-     for (key in colors) {
+    for (key in colors) {
         if (colors[key].length == 1) {
             $('#' + key).css("background-color", colors[key][0]);
         } else {
             console.log("setting gradient");
-             $('#' + key).css({background: "linear-gradient(151deg, " + colors[key][0] +  " 30%, " + colors[key][1] + " 70%)"});
+            $('#' + key).css({background: "linear-gradient(151deg, " + colors[key][0] +  " 30%, " + colors[key][1] + " 70%)"});
         }
-     }
+    }
 
      // enable all tooltips
-    $('[data-toggle="tooltip"]').tooltip()
+     $('[data-toggle="tooltip"]').tooltip()
 
     // make links work in pan area
-    $('.zoomable a').on('mousedown touchstart', function(e) {
+  /*  $('.zoomable a').on('mousedown touchstart', function(e) {
         console.log("touch");
         e.stopImmediatePropagation();
+    });*/
+
+    var getPointerEvent = function(event) {
+        return event.originalEvent.targetTouches ? event.originalEvent.targetTouches[0] : event;
+    };
+
+
+    var panArea = panzoom(document.querySelector('.zoomable'), {
+        maxZoom: 0.8,
+        minZoom: 0.2,
+        zoomSpeed: 0.05,
+        onTouch: function(e) {
+            console.log("touch");
+            return false; // tells the library to not preventDefault.
+        }
     });
+
+    panArea.zoomAbs(300, 0, 0.3);
+
+    var $touchArea = $('.zoomable'),
+    touchStarted = false, // detect if a touch event is sarted
+    currX = 0,
+    currY = 0,
+    cachedX = 0,
+    cachedY = 0;
+
+//setting the events listeners
+$touchArea.on('touchstart mousedown',function (e){
+   
+    var pointer = getPointerEvent(e);
+    // caching the current x
+    cachedX = currX = pointer.pageX;
+    // caching the current y
+    cachedY = currY = pointer.pageY;
+    // a touch event is detected      
+    touchStarted = true;
+
+
+});
+$touchArea.on('touchend mouseup touchcancel',function (e){
+    e.preventDefault();
+    // here we can consider finished the touch event
+    touchStarted = false;
+
+});
+$touchArea.on('touchmove mousemove',function (e){
+    e.preventDefault();
+    var pointer = getPointerEvent(e);
+    currX = pointer.pageX;
+    currY = pointer.pageY;
+    if(touchStarted) {
+         // here you are swiping
+         console.log("swipe");
+
+     }
+
+ });
 
 
     // set the map to the center
@@ -58,7 +114,7 @@ $( document ).ready(function() {
     //$panzoom.panzoom("zoom", 0.3, { silent: true });
 
 
-    // listen for mousewheel to zoom
+   /* // listen for mousewheel to zoom
     $panzoom.parent().on('mousewheel.focal', function(e) {
 
         e.preventDefault();
@@ -70,7 +126,15 @@ $( document ).ready(function() {
             animate: false,
             focal: e
         });
-    });
+    });*/
+
+/*    panzoom(document.querySelector('.zoomable'), {
+        onTouch: function(e) {
+            console.log("touch");
+    // `e` - is current touch event.
+    return false; // tells the library to not preventDefault.
+  }
+});*/
 
 });
 
