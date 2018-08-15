@@ -99,6 +99,7 @@ body, html {
         <i class="fas fa-bars"></i>
     </button>
 
+    <!-- Map Content -->
 
     <div class="parent" style="overflow: hidden; position: relative;">
     <div class='zoomable' >
@@ -113,14 +114,16 @@ body, html {
                             {% if frames %}
                                 data-target=".popup-{{ point.id }}"
                             {% else %}
-                                onclick="location.href='details/{{ point.id }}';"
+                                onclick="location.href='details/{{ point.id }}?sender=map';"
                             {% endif %}
                             style="bottom:{{ point.y|add:"-25" }}px; left:{{ point.x|add:"-25" }}px;"
                             >
                             <div class="click-center"
                                  style="bottom:12.5px; left:12.5px;"
                                  id="{{ point.id }}"
-                                 data-toggle="tooltip" data-placement="bottom" title="{{ point.short_name }}">
+                                 {% if frames %}
+                                    data-toggle="tooltip" data-placement="bottom" title="{{ point.short_name }}">
+                                 {% endif %}
                             </div>
                     </button>
 
@@ -143,8 +146,6 @@ body, html {
             </div>
         </div>
     {% endfor %}
-   
-
     {% endif %}
 
 {% endblock %}

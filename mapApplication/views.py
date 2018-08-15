@@ -35,7 +35,6 @@ def index(request):
             query = request.GET.get(point.id)
             if query:
                 openId = point.id
-                # print('setting openId to ' + point.id )
 
             for tag in queryTagsSelected:
                 # if the point has a disabled tag, 
@@ -70,4 +69,21 @@ def index(request):
 def details(request, id):
     pt = get_object_or_404(Point, pk=id)
     images = pt.number_of_images()
-    return render(request, 'detail.html', {'point': pt, 'images': range(images), 'imgNum': images})
+    backArrow = False
+    ogMap = False
+    # if there is a sender param in url, display back arrow on details page
+    sender = request.GET.get('sender')
+    # if sender in url
+    if sender: 
+        backArrow = True
+     # if there is a redirected param in url, make "Back to map" go to clean map url (no params)
+    redir = request.GET.get('redirected')
+    # if sender in url
+    if redir: 
+        ogMap = True
+           
+    return render(request, 'detail.html', {'point': pt,
+                                           'images': range(images),
+                                           'imgNum': images,
+                                           'back': backArrow,
+                                           'redirected': ogMap, })

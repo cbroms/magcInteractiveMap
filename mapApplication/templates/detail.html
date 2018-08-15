@@ -21,26 +21,27 @@
     {% load static %}
 <div class="container-fluid" style="background-color:#e8ebef;">
     <div class="container native" style="">
-        <img src="{{ point.main_image.url }}" class="img-fluid center-block main-image rounded" style="width:100%;position:sticky; top:0px;">
+        <img src="{{ point.main_image.url }}" class="img-fluid center-block main-image rounded" style="width:100%;position:sticky; top:0px; z-index:-1000;">
     </div>
     <div class="container rounded shrink shadow" style="margin-bottom: 20px;">
-        <div class="faded-background center-block" style="width:{{ point.main_image.width }}px;"></div>
-        <div class="back-fill" style="background-color: #f7f7f7; margin: 0; position: relative;">
+    
+        <div class="content-cover rounded">
+            <div class="faded-background center-block" style="width:{{ point.main_image.width }}px;"></div>
+            <div class="back-fill" style="background-color: #f7f7f7; margin: 0; position: relative;">
             {% if point.long_name %}
-                <h1 class="text-center" >{{ point.long_name }}</h1>
+                <h1 class="text-center" style="padding: 8px;">{{ point.long_name }}</h1>
             {% else %}
-                <h1 class="text-center">{{ point.short_name }}</h1>
+                <h1 class="text-center" style="padding: 8px;">{{ point.short_name }}</h1>
             {% endif %}
         </div>
-        <div class="content-cover rounded">
-            <br>
-            <div class="tags center-block">
+        <div class="white" style="margin-top: -1px;">
+            <div class="tags center-block white">
                 {% for tag in point.tags.all %}
                     <div class="btn btn-outline" style="color:{{ tag.color }}; border-color:{{ tag.color}}; cursor: default;">{{ tag.name }}</div>
                 {% endfor %}
             </div>
-            <br>
-            <p class="center-block paragraph">{{ point.short_description}}</p>
+ 
+            <p class="center-block paragraph white">{{ point.short_description}}</p>
 
             {% if images %}
                 <div class=" slider ">
@@ -50,7 +51,7 @@
                 </div>
 
                 {% if imgNum > 1 %}
-                <div class="tags center-block">
+                <div class="tags center-block white">
                     <button class="left-btn btn"><i class="fas fa-caret-left fa-lg"></i></button>
                     <button class="right-btn btn"><i class="fas fa-caret-right fa-lg"></i></button>
                 </div>
@@ -58,14 +59,30 @@
             {% endif %}
 
             {% if point.long_description %}
-                <p class="center-block paragraph">{{ point.long_description}}</p>
+                <p class="center-block paragraph white">{{ point.long_description}}</p>
+            {% endif %}
+
+            {% if back %}
+
+             <button type="button" class="btn shadow" 
+                    data-toggle="button" 
+                    aria-pressed="false"
+                    {% if redirected %}
+                        onclick="window.location.href = '../';" 
+                    {% else %}
+                        onclick="window.history.back();" 
+                    {% endif %}
+                    style="background-color:#4B577D; color: white; width: 200px; display: block; margin: 20px auto;"
+                    > Back to map 
+                </button>
+
             {% endif %}
 
                 <button type="button" class="btn " id="share" 
                     data-toggle="button" 
                     aria-pressed="false"
                     onclick="displayShare()" 
-                    style="background-color:#4B577D33; width: 200px; display: block; margin: 0 auto;"
+                    style="background-color:#4B577D33; width: 200px; display: block; margin: 20px auto;"
                     > Share this page 
                 </button>
             <br>
@@ -81,7 +98,7 @@
             <br>
 
 
-
+</div>
         </div>
     </div>
 </div>

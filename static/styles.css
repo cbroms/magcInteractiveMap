@@ -146,7 +146,7 @@ p {
 }
 
 .shrink {
-    background-color: #f7f7f7;
+   /* background-color: #f7f7f7;*/
 }
 
 .native {
@@ -163,8 +163,14 @@ p {
 
 .content-cover {
     position: relative;
-    background-color: #f7f7f7;
+    /**/
     margin-top: -1px;
+}
+
+.white {
+    background-color: #f7f7f7;
+    padding-bottom: 25px;
+    padding-top: 25px;
 }
 
 .shadow {
@@ -231,7 +237,7 @@ iframe{
   }
   .slider {
     height: auto;
-    margin: 20px auto;    
+ 
     text-align: center;
   }
 
@@ -250,7 +256,7 @@ iframe{
     transition: opacity 1s ease-in-out;
 }
 .slick-slide {
-    width: 420px;
+    max-width: 520px;
     margin: 0 10px;
 }
 

@@ -143,9 +143,13 @@ Pace.on("done", () => {
     $("#map").removeClass("hidden");
     $("#clickElements").removeClass("hidden");
 
+    // open a modal by default if requested in url (for touch)
+    if (!frames && open != "") {
+        window.location.href = 'details/' + open + '?sender=map&redirected=true';
+    }
+    // open a modal by default if requested in url (for desktop)
     if ($('.popup-' + open ).length > 0) {
-        // open a modal by default if requested in url
-        $('.popup-' + open ).modal('show')
+        $('.popup-' + open ).modal('show');
     }
 });
 
