@@ -69,6 +69,15 @@ def index(request):
 def details(request, id):
     pt = get_object_or_404(Point, pk=id)
     images = pt.number_of_images()
+    caption = []
+
+    # captions 
+    caption.append(pt.additional_caption1)
+    caption.append(pt.additional_caption2)
+    caption.append(pt.additional_caption3)
+    caption.append(pt.additional_caption4)
+    caption.append(pt.additional_caption5)
+
     backArrow = False
     ogMap = False
     # if there is a sender param in url, display back arrow on details page
@@ -85,5 +94,7 @@ def details(request, id):
     return render(request, 'detail.html', {'point': pt,
                                            'images': range(images),
                                            'imgNum': images,
+                                           'captions': caption, 
                                            'back': backArrow,
-                                           'redirected': ogMap, })
+                                           'redirected': ogMap,
+                                           'iterator': zip(range(images), caption), })

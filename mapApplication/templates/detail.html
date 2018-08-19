@@ -29,13 +29,13 @@
             <div class="faded-background center-block" style="width:{{ point.main_image.width }}px;"></div>
             <div class="back-fill" style="background-color: #f7f7f7; margin: 0; position: relative;">
             {% if point.long_name %}
-                <h1 class="text-center" style="padding: 8px;">{{ point.long_name }}</h1>
+                <h1 class="text-center" style="padding: 8px; margin-bottom:10px;">{{ point.long_name }}</h1>
             {% else %}
-                <h1 class="text-center" style="padding: 8px;">{{ point.short_name }}</h1>
+                <h1 class="text-center" style="padding: 8px; margin-bottom:10px;">{{ point.short_name }}</h1>
             {% endif %}
         </div>
         <div class="white" style="margin-top: -1px;">
-            <div class="tags center-block white">
+            <div class="tags center-block white" style="padding-top:5px;">
                 {% for tag in point.tags.all %}
                     <div class="btn btn-outline" style="color:{{ tag.color }}; border-color:{{ tag.color}}; cursor: default;">{{ tag.name }}</div>
                 {% endfor %}
@@ -44,18 +44,29 @@
             <p class="center-block paragraph white">{{ point.short_description}}</p>
 
             {% if images %}
-                <div class=" slider ">
-                    {% for i in images %}
-                        <div><img class="rounded" src="/media/{{ forloop.counter }}/{{ point.id }}.jpg" style="width: 100%;"></div>
-                    {% endfor %}  
+
+                <!-- Image carousel -->
+
+                <div class="slider">
+                    {% for image, caption in iterator %}
+                        <div>
+                            <img class="rounded" src="/media/{{ forloop.counter }}/{{ point.id }}.jpg" style="width: 100%;">
+                            <p>{{ caption }}</p>
+                        </div>
+                    {% endfor %}
                 </div>
 
                 {% if imgNum > 1 %}
+
+                <!-- Image carousel controls -->
+
                 <div class="tags center-block white">
                     <button class="left-btn btn"><i class="fas fa-caret-left fa-lg"></i></button>
                     <button class="right-btn btn"><i class="fas fa-caret-right fa-lg"></i></button>
                 </div>
+
                 {% endif %}
+
             {% endif %}
 
             {% if point.long_description %}
@@ -64,7 +75,9 @@
 
             {% if back %}
 
-             <button type="button" class="btn shadow" 
+                <!-- Back button on mobile detail page only  -->
+
+                <button type="button" class="btn shadow" 
                     data-toggle="button" 
                     aria-pressed="false"
                     {% if redirected %}
@@ -78,6 +91,8 @@
 
             {% endif %}
 
+                <!-- Share button -->
+
                 <button type="button" class="btn " id="share" 
                     data-toggle="button" 
                     aria-pressed="false"
@@ -86,6 +101,8 @@
                     > Share this page 
                 </button>
             <br>
+
+            <!-- Hidden share button info -->
 
             <div class="container text-center" id="share-details" style="visibility: hidden; background-color:#4B577D33;">
                 <div style="padding: 10px;">

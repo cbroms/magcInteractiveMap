@@ -45,10 +45,15 @@ class Point(models.Model):
     main_image = models.ImageField(null=True, upload_to=rename0)
 
     additional_image1 = models.ImageField(blank=True, null=True, upload_to=rename1)
+    additional_caption1 = models.CharField(max_length=100, blank=True)
     additional_image2 = models.ImageField(blank=True, null=True, upload_to=rename2)
+    additional_caption2 = models.CharField(max_length=100, blank=True)
     additional_image3 = models.ImageField(blank=True, null=True, upload_to=rename3)
+    additional_caption3 = models.CharField(max_length=100, blank=True)
     additional_image4 = models.ImageField(blank=True, null=True, upload_to=rename4)
+    additional_caption4 = models.CharField(max_length=100, blank=True)
     additional_image5 = models.ImageField(blank=True, null=True, upload_to=rename5)
+    additional_caption5 = models.CharField(max_length=100, blank=True)
 
     x = models.DecimalField(null=True, max_digits=12, decimal_places=8, blank=True)
     y = models.DecimalField(null=True, max_digits=12, decimal_places=8, blank=True)

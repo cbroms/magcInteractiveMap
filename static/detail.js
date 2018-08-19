@@ -10,8 +10,8 @@ $(window).resize(function() {
         Math.ceil($(".native").width())
     );
 
-     if (window.innerWidth < 420) {
-      console.log((window.innerWidth).toString() + "px");
+    // if window is small, set the width of images in the slider to be window size
+     if (window.innerWidth < 520) {
       $('.slick-slide').css("max-width", (window.innerWidth - 10).toString() + "px");
     }
 });
@@ -57,8 +57,7 @@ window.onload = function() {
         slidesToShow: 1
     }}]});
 
-     if (window.innerWidth < 420) {
-      console.log((window.innerWidth).toString() + "px");
+     if (window.innerWidth < 520) {
       $('.slick-slide').css("max-width", (window.innerWidth - 10).toString() + "px");
     }
 };
@@ -105,7 +104,7 @@ function SelectText(element) {
     }
 }
 
-$(".copyable").click(function (e) {
+$(".copyable").click((e) => {
             
   $(this).attr("contenteditable", true);
     
