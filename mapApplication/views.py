@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, Http404
-from .models import Point, Map, Tag
+from .models import Point, Map, Tag, Info
 from django.forms.models import model_to_dict
 
 def index(request):
@@ -98,3 +98,24 @@ def details(request, id):
                                            'back': backArrow,
                                            'redirected': ogMap,
                                            'iterator': zip(range(images), caption), })
+
+def about_credits(request):
+
+    info = get_object_or_404(Info, pk=1)
+
+    backArrow = False
+    ogMap = False
+    # if there is a sender param in url, display back arrow on details page
+    sender = request.GET.get('sender')
+    # if sender in url
+    if sender: 
+        backArrow = True
+    # if there is a redirected param in url, make "Back to map" go to clean map url (no params)
+    redir = request.GET.get('redirected')
+    # if sender in url
+    if redir: 
+        ogMap = True
+
+    return render(request, 'about.html', {'back': backArrow,
+                                          'redirected': ogMap,
+                                          'info': info, })

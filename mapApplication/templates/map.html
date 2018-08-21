@@ -93,6 +93,22 @@ body, html {
                     > MAGC Home →
                 </button>
         </div>
+
+        <div class="container rounded tags-container">
+            <h5>More</h5>
+            <hr>    
+            <button type="button" class="btn btn-block" 
+                    data-toggle="modal" 
+                    {% if frames %}
+                        data-target=".popup-about"
+                    {% else %}
+                        onclick="location.href='about-credits?sender=map';"
+                    {% endif %}
+
+                    style="background-color:#4B577D33;"
+                    > About & Credits
+                </button>
+        </div>
         </div>
     </nav>
     <button type="button" id="sidebarCollapse" class="btn btn-info">
@@ -146,6 +162,20 @@ body, html {
             </div>
         </div>
     {% endfor %}
+    
+
+    <!-- Popup window for credits and about -->
+    <div class="modal fade popup-about" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <iframe src="about-credits" class="rounded details-frame"></iframe>
+                </div>
+            </div>
+        </div>
+
     {% endif %}
 
 {% endblock %}

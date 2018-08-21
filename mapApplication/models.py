@@ -116,3 +116,24 @@ class Map(models.Model):
 
     def __str__(self):
         return os.path.basename(self.image.name)
+
+# singleton model for about and credits 
+class Info(models.Model):
+
+    about = models.TextField(null=True)
+    credits = models.TextField(null=True)
+
+    def save(self, *args, **kwargs):
+        if Info.objects.exists() and not self.pk:
+            raise ValidationError('Please update the original about and credits entry')
+        return super(Info, self).save(*args, **kwargs)
+
+    class Meta:
+        verbose_name_plural = 'About and Credits'
+
+    def __str__(self):
+        return 'About and Credits'
+
+
+
+

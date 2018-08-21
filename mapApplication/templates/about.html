@@ -1,0 +1,66 @@
+{% extends 'base.html' %} 
+{% block head_title %}About{% endblock %}
+{% block head %}
+<meta name="viewport" content="initial-scale=1.0" />
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+
+
+<style type="text/css">
+    h1 {
+        max-width: 550px;
+        margin: auto !important;
+    }
+    html, body {
+        background-color: #e8ebef;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+    {% load static %}
+<div class="container-fluid" style="background-color:#e8ebef;">
+    
+    <div class="container rounded shrink shadow" style="margin-bottom: 20px;margin-top: 20px;">
+    
+        <div class="white rounded" >
+
+            <h1 class="text-center" style="padding-top:25px !important;">About</h1>
+
+            <p class="center-block paragraph white">{{ info.about }} </p>
+
+            <h1 class="text-center">Credits</h1>
+
+            <p class="center-block paragraph white">{{ info.credits }}</p>
+            <p class="center-block paragraph white">Website designed and built by <a href="https://christianbroms.com">Christian Broms</a>.</p>
+
+
+            {% if back %}
+
+                <!-- Back button on mobile detail page only  -->
+
+                <button type="button" class="btn shadow" 
+                    data-toggle="button" 
+                    aria-pressed="false"
+                    {% if redirected %}
+                        onclick="window.location.href = '../';" 
+                    {% else %}
+                        onclick="window.history.back();" 
+                    {% endif %}
+                    style="background-color:#4B577D; color: white; width: 200px; display: block; margin: 20px auto;"
+                    > Back to map 
+                </button>
+
+            {% endif %}
+            <br>
+        </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts%}
+<script type="text/javascript" src="{% static "detail.js" %}"></script>
+
+{% endblock %}
