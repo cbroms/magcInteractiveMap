@@ -47,9 +47,6 @@ i .colored {
   right: 0;
   bottom: 0;
   left: 0;
-  background-image: -webkit-gradient(linear, left bottom, right top, from(#8AAAD9), to(#F79548));
-  background-image: -webkit-linear-gradient(bottom left, #8AAAD9, #F79548);
-  background-image: -o-linear-gradient(bottom left, #8AAAD9, #F79548);
   background-image: linear-gradient(to top right, #8AAAD9, #F79548);
   opacity: .8;
 }
