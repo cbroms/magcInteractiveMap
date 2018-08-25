@@ -2,11 +2,12 @@ from django.contrib import admin
 from .models import Point, Tag, Map, Info
 
 class PointAdmin(admin.ModelAdmin):
-    #exclude = ['x', 'y']
-    prepopulated_fields = {'id': ('short_name',)}
+    
+    prepopulated_fields = {'slug': ('short_name',)}
+    exclude = ['x', 'y']
 
 class TagAdmin(admin.ModelAdmin):
-    prepopulated_fields = {'id': ('name',)}
+    prepopulated_fields = {'slug': ('name',)}
 
 admin.site.register(Point, PointAdmin)
 admin.site.register(Tag, TagAdmin)

@@ -50,7 +50,7 @@
                 <div class="slider">
                     {% for image, caption in iterator %}
                         <div>
-                            <img class="rounded" src="/media/{{ forloop.counter }}/{{ point.id }}.jpg" style="width: 100%;">
+                            <img class="rounded" src="/media/{{ forloop.counter }}/{{ point.slug }}.jpg" style="width: 100%;">
                             <p>{{ caption }}</p>
                         </div>
                     {% endfor %}
@@ -106,7 +106,7 @@
 
             <div class="container text-center" id="share-details" style="visibility: hidden; background-color:#4B577D33;">
                 <div style="padding: 10px;">
-                <p>Short Link <em>(click to copy)</em> <br> <span id="loc" class="copyable"><b>{{ request.get_host }}/map/?{{ point.id }}=open</b></span></p>
+                <p>Short Link <em>(click to copy)</em> <br> <span id="loc" class="copyable"><b>{{ request.get_host }}/map/?{{ point.slug }}=open</b></span></p>
                 <p>QR Code <em>(click to copy)</em></p>
                 <div id="qrcode" class="copyable" style="margin: 0 auto;"></div>
                 </div>

@@ -33,7 +33,7 @@ class Point(models.Model):
 
     short_name = models.CharField(max_length=30, unique=True)
     long_name = models.CharField(max_length=100, blank=True)
-    id = models.SlugField(unique=True, primary_key=True)
+    slug = models.SlugField(unique=True)
     tags = models.ManyToManyField('mapApplication.Tag')
 
     short_description = models.TextField(null=True)
@@ -81,7 +81,7 @@ class Point(models.Model):
 class Tag(models.Model):
 
     name = models.CharField(max_length=30, unique=True)
-    id = models.SlugField(unique=True, primary_key=True)
+    slug = models.SlugField(unique=True)
     color = models.CharField(max_length=7, unique=True, help_text='Enter a hexadecimal color value', validators=[
         RegexValidator(regex='^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$', message='Value is not a valid hexadecimal color')
         ])

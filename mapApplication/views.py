@@ -13,7 +13,7 @@ def index(request):
         for tag in tagObjects:
             # add tag to list of tags to be passed to template
             queryTags.append(tag)
-            slug = tag['id']
+            slug = tag['slug']
             query = request.GET.get(slug)
             # if tag name is set to false in url
             if query: 
@@ -30,11 +30,11 @@ def index(request):
             numberOfTags = point.tags.count()
             numberOfDisabledTags = 0
             badTags = []
-            colors[point.id] = []
+            colors[point.slug] = []
 
-            query = request.GET.get(point.id)
+            query = request.GET.get(point.slug)
             if query:
-                openId = point.id
+                openId = point.slug
 
             for tag in queryTagsSelected:
                 # if the point has a disabled tag, 
@@ -44,12 +44,12 @@ def index(request):
             # if the point has at least one non-disabled tag, 
             if numberOfTags > numberOfDisabledTags:
                 # add the point to the list to send to template
-                pts.append(Point.objects.filter(id=point.id).values()[0])
+                pts.append(Point.objects.filter(slug=point.slug).values()[0])
 
                 for tag in point.tags.all():
                     # if the tag is not disabled
                     if tag.name not in badTags:
-                        colors[point.id].append(tag.color) 
+                        colors[point.slug].append(tag.color) 
         showIFrames = True 
         if request.user_agent.is_mobile or request.user_agent.is_tablet:
             showIFrames = False
@@ -67,7 +67,7 @@ def index(request):
                                         'frames': showIFrames,})
 
 def details(request, id):
-    pt = get_object_or_404(Point, pk=id)
+    pt = get_object_or_404(Point, slug=id)
     images = pt.number_of_images()
     caption = []
 

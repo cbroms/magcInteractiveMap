@@ -37,7 +37,6 @@ $( document ).ready(function() {
         if (colors[key].length == 1) {
             $('#' + key).css("background-color", colors[key][0]);
         } else {
-            console.log("setting gradient");
             $('#' + key).css({background: "linear-gradient(151deg, " + colors[key][0] +  " 30%, " + colors[key][1] + " 70%)"});
         }
     }

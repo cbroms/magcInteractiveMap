@@ -43,14 +43,14 @@ body, html {
             <button type="button" class="btn active" 
                     data-toggle="button" 
                     aria-pressed="true"
-                    onclick="window.location.href='{% value_in_url tag.id request.GET.urlencode %}'"
+                    onclick="window.location.href='{% value_in_url tag.slug request.GET.urlencode %}'"
                     style="background-color:{{ tag.color }}33;opacity: 0.4;" 
                     ><i class="fas fa-plus"></i>
                 </button>
                     <button type="button" class="btn active  " 
                     data-toggle="button" 
                     aria-pressed="true"
-                    onclick="window.location.href='{% value_in_url tag.id request.GET.urlencode %}'"
+                    onclick="window.location.href='{% value_in_url tag.slug request.GET.urlencode %}'"
                     style="background-color:{{ tag.color }}33;  opacity: 0.4; width: 180px;" 
                     >
                     {{tag.name}}
@@ -60,14 +60,14 @@ body, html {
              <button type="button" class="btn" 
                     data-toggle="button" 
                     aria-pressed="true"
-                    onclick="window.location.href='{% value_in_url tag.id request.GET.urlencode %}'"
+                    onclick="window.location.href='{% value_in_url tag.slug request.GET.urlencode %}'"
                     style="background-color:{{ tag.color }}33; width: 40px; " 
                     ><i class="fas fa-times"></i>
                 </button>
                 <button type="button" class="btn" 
                     data-toggle="button" 
                     aria-pressed="false"
-                    onclick="window.location.href='{% value_in_url tag.id request.GET.urlencode %}'"
+                    onclick="window.location.href='{% value_in_url tag.slug request.GET.urlencode %}'"
                     style="background-color:{{ tag.color }}33; width: 180px;" 
                     >
                     {{tag.name}}
@@ -129,15 +129,15 @@ body, html {
                 {% for point in points %}
                     <button type="button" class="btn click pulse" data-toggle="modal" 
                             {% if frames %}
-                                data-target=".popup-{{ point.id }}"
+                                data-target=".popup-{{ point.slug }}"
                             {% else %}
-                                onclick="location.href='details/{{ point.id }}?sender=map';"
+                                onclick="location.href='details/{{ point.slug }}?sender=map';"
                             {% endif %}
                             style="bottom:{{ point.y|add:"-25" }}px; left:{{ point.x|add:"-25" }}px;"
                             >
                             <div class="click-center"
                                  style="bottom:12.5px; left:12.5px;"
-                                 id="{{ point.id }}"
+                                 id="{{ point.slug }}"
                                  {% if frames %}
                                     data-toggle="tooltip" data-placement="bottom" title="{{ point.short_name }}">
                                  {% endif %}
@@ -152,13 +152,13 @@ body, html {
     <!-- Popup windows for each point on the map (only if not mobile/tablet to speed up page) -->
     {% if frames %}
     {% for point in points %}
-        <div class="modal fade popup-{{ point.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal fade popup-{{ point.slug }}" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <i class="fas fa-times"></i>
                     </button>
-                    <iframe src="details/{{ point.id }}" class="rounded details-frame"></iframe>
+                    <iframe src="details/{{ point.slug }}" class="rounded details-frame"></iframe>
                 </div>
             </div>
         </div>
