@@ -1,0 +1,1 @@
+web: gunicorn magcInteractiveMap.wsgi --log-file -
