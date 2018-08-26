@@ -35,12 +35,7 @@
             {% endif %}
         </div>
         <div class="white" style="margin-top: -1px;">
-            <div class="tags center-block white" style="padding-top:5px;">
-                {% for tag in point.tags.all %}
-                    <div class="btn btn-outline" style="color:{{ tag.color }}; border-color:{{ tag.color}}; cursor: default;">{{ tag.name }}</div>
-                {% endfor %}
-            </div>
- 
+            
             <p class="center-block paragraph white">{{ point.short_description}}</p>
 
             {% if images %}
@@ -72,6 +67,20 @@
             {% if point.long_description %}
                 <p class="center-block paragraph white">{{ point.long_description}}</p>
             {% endif %}
+
+            <!-- Tags -->
+
+            <div class="tags center-block white" style="padding-top:5px;">
+                Tagged under 
+                {% for tag in point.tags.all %}
+                    <span style="color:{{ tag.color }}">{{ tag.name }}</span>
+                    {% if forloop.last %}
+                    .
+                    {% else %}
+                    ,
+                    {% endif %}
+                {% endfor %}
+            </div>
 
             {% if back %}
 
@@ -126,5 +135,4 @@
 <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 <script type="text/javascript" src="{% static "qrcode.min.js" %}"></script>
 <script type="text/javascript" src="{% static "detail.js" %}"></script>
-
 {% endblock %}
