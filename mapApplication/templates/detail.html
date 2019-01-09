@@ -38,14 +38,14 @@
             
             <p class="center-block paragraph white">{{ point.short_description}}</p>
 
-            {% if images %}
+            {% if imgNum > 0 %}
 
                 <!-- Image carousel -->
 
                 <div class="slider">
                     {% for image, caption in iterator %}
                         <div>
-                            <img class="rounded" src="/media/{{ forloop.counter }}/{{ point.slug }}.jpg" style="width: 100%;">
+                            <img class="rounded" src="{{ image.url }}" style="width: 100%;">
                             <p>{{ caption }}</p>
                         </div>
                     {% endfor %}

@@ -92,12 +92,12 @@ def details(request, id):
         ogMap = True
            
     return render(request, 'detail.html', {'point': pt,
-                                           'images': range(images),
-                                           'imgNum': images,
+                                           'images': images,
+                                           'imgNum': len(images),
                                            'captions': caption, 
                                            'back': backArrow,
                                            'redirected': ogMap,
-                                           'iterator': zip(range(images), caption), })
+                                           'iterator': zip(images, caption), })
 
 def about_credits(request):
 

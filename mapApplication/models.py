@@ -67,11 +67,11 @@ class Point(models.Model):
         super().save(*args, **kwargs)
 
     def number_of_images(self):
-        res = 0
+        res = []
         for i in range(5):
             value = "additional_image" + str(i + 1)
             if getattr(self, value):
-                res += 1
+                res.append(getattr(self, value))
         return res
 
     def __str__(self):
