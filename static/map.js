@@ -1,6 +1,6 @@
 
 
-$( window ).resize(function() {
+$(window).resize(function() {
     $(".details-frame").height(
         Math.ceil($(window).height() * 0.9)
         );
@@ -13,7 +13,9 @@ $( window ).resize(function() {
 });
 
 
-$( document ).ready(function() {
+$(document).ready(function() {
+
+    console.log("app running!")
 
     $(".details-frame").height(
         Math.ceil($(window).height() * 0.9)
@@ -33,6 +35,7 @@ $( document ).ready(function() {
         $('#sidebarCollapse').toggleClass('side');
     });
 
+    // set the colors of each point
     for (key in colors) {
         if (colors[key].length == 1) {
             $('#' + key).css("background-color", colors[key][0]);
@@ -44,40 +47,67 @@ $( document ).ready(function() {
      // enable all tooltips
      $('[data-toggle="tooltip"]').tooltip()
 
+
     // make links work in pan area
   /*  $('.zoomable a').on('mousedown touchstart', function(e) {
         console.log("touch");
         e.stopImmediatePropagation();
     });*/
 
-    var getPointerEvent = function(event) {
-        return event.originalEvent.targetTouches ? event.originalEvent.targetTouches[0] : event;
-    };
-
-
-    var panArea = panzoom(document.querySelector('.zoomable'), {
-        maxZoom: 0.8,
+    
+    // init panzoom 
+    let panArea = panzoom(document.querySelector('.zoomable'), {
+        maxZoom: 0.99,
         minZoom: 0.2,
         zoomSpeed: 0.05,
         onTouch: function(e) {
-            console.log("touch");
             return false; // tells the library to not preventDefault.
         }
     });
 
+    let isZoomed = function() {
+        let matrix = $('.zoomable').first().css('transform')
+        let zoom = parseFloat(matrix.split('matrix(')[1].split(',')[0])
+        return (zoom >= 0.75)
+    }
+
+    // when map is zoomed, check if zoom level is large enough to show
+    // the point tooltip tags 
+    panArea.on('transform', function(e) {
+        if (isZoomed()) {
+            $('.click-center').tooltip('show')
+        } else {
+            $('.click-center').tooltip('hide')
+        }
+    });
+
+
+    // when a button is clicked, close the tooltips 
+    $('.btn').click(function(){
+        $('.click-center').tooltip('hide')
+    })
+
+
+    // set initial position
     panArea.zoomAbs(300, 0, 0.3);
 
-    var $touchArea = $('.zoomable'),
-    touchStarted = false, // detect if a touch event is sarted
+    // select pan area and set og x and y pos
+    let $touchArea = $('.zoomable'),
+    touchStarted = false, 
     currX = 0,
     currY = 0,
     cachedX = 0,
     cachedY = 0;
 
-//setting the events listeners
-$touchArea.on('touchstart mousedown',function (e){
+var getPointerEvent = function(event) {
+        return event.originalEvent.targetTouches ? event.originalEvent.targetTouches[0] : event;
+    };
+
+
+// detect swipes vs clicks on mobile
+$touchArea.on('touchstart mousedown', function (e){
    
-    var pointer = getPointerEvent(e);
+    let pointer = getPointerEvent(e);
     // caching the current x
     cachedX = currX = pointer.pageX;
     // caching the current y
@@ -87,53 +117,25 @@ $touchArea.on('touchstart mousedown',function (e){
 
 
 });
-$touchArea.on('touchend mouseup touchcancel',function (e){
+
+$touchArea.on('touchend mouseup touchcancel', function (e){
     e.preventDefault();
-    // here we can consider finished the touch event
+    // touch finished
     touchStarted = false;
 
 });
-$touchArea.on('touchmove mousemove',function (e){
+
+$touchArea.on('touchmove mousemove', function (e){
     e.preventDefault();
-    var pointer = getPointerEvent(e);
+    let pointer = getPointerEvent(e);
     currX = pointer.pageX;
     currY = pointer.pageY;
-    if(touchStarted) {
-         // here you are swiping
-         console.log("swipe");
+    if (touchStarted) {
+         // swiping
 
      }
-
  });
 
-
-    // set the map to the center
-    //$panzoom.panzoom("setMatrix", [ 0, 0, 0, 0, -220, -1085 ]);
-    // zoom out by default
-    //$panzoom.panzoom("zoom", 0.3, { silent: true });
-
-
-   /* // listen for mousewheel to zoom
-    $panzoom.parent().on('mousewheel.focal', function(e) {
-
-        e.preventDefault();
-        let delta = e.delta || e.originalEvent.wheelDelta;
-        let zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
-
-        $panzoom.panzoom('zoom', zoomOut, {
-            increment: 0.1,
-            animate: false,
-            focal: e
-        });
-    });*/
-
-/*    panzoom(document.querySelector('.zoomable'), {
-        onTouch: function(e) {
-            console.log("touch");
-    // `e` - is current touch event.
-    return false; // tells the library to not preventDefault.
-  }
-});*/
 
 });
 
@@ -151,4 +153,7 @@ Pace.on("done", () => {
         $('.popup-' + open ).modal('show');
     }
 });
+
+
+
 
