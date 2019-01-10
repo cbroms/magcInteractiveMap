@@ -99,6 +99,14 @@ def details(request, id):
     pt = get_object_or_404(Point, slug=id)
     images = pt.number_of_images()
     caption = []
+    showGuide = False
+
+
+    # determine if we should show the continue button for guide
+    guide = request.GET.get('guide', '')
+
+    if guide.lower() == 'true':
+        showGuide = True
 
     # captions 
     caption.append(pt.additional_caption1)
@@ -126,7 +134,8 @@ def details(request, id):
                                            'captions': caption, 
                                            'back': backArrow,
                                            'redirected': ogMap,
-                                           'iterator': zip(images, caption), })
+                                           'iterator': zip(images, caption),
+                                           'guide': showGuide })
 
 def about_credits(request):
 

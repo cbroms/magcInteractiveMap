@@ -18,6 +18,13 @@ body, html {
 <script type="text/javascript" src="{% static "pace.min.js" %}"></script>
 <link rel="stylesheet" type="text/css" href="{% static "pace.css" %}">
 <script type="text/javascript" src="{% static "inobounce.min.js" %}"></script>
+
+<script type="text/javascript">
+function closeDetails() {
+    $('.popup').modal('hide')
+}
+
+</script>
 {% endblock %}
 
 {% block content %}
@@ -239,7 +246,6 @@ body, html {
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <i class="fas fa-times"></i>
                     </button>
-                    <!-- <iframe src="details/{{ point.slug }}" class="rounded details-frame"></iframe> -->
                 </div>
             </div>
         </div>

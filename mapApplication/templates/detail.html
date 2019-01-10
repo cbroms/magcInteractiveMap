@@ -87,6 +87,7 @@
                 {% endfor %}
             </div>
 
+
             {% if back %}
 
                 <!-- Back button on mobile detail page only  -->
@@ -102,6 +103,18 @@
                     style="background-color:#4B577D; color: white; width: 200px; display: block; margin: 20px auto;"
                     > Back to map 
                 </button>
+
+            {% elif guide %}
+
+
+              <button type="button" class="btn shadow" 
+                    data-toggle="button" 
+                    aria-pressed="false"
+                    onclick="parent.closeDetails();" 
+                    style="background-color:#4B577D; color: white; width: 200px; display: block; margin: 20px auto;"
+                    > Continue Tour &rarr;
+                </button>
+
 
             {% endif %}
 

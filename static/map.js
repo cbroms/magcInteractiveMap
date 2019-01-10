@@ -151,7 +151,7 @@ $(document).ready(function() {
     if (guide){
         locationsJSON = JSON.parse(locations)
         locationsTextJSON = JSON.parse(locationsText)
-        let step = parseInt(currUrl.searchParams.get("guide-step"))
+        let step = parseInt(currUrl.searchParams.get("step"))
 
         // if the step is specified
         if (step != undefined && step < locationsJSON.length && step >= 0) {
@@ -210,7 +210,12 @@ Pace.on("done", () => {
 
     // disable Pace
     Pace.options = {
-        ajax: false
+        ajax: false,
+        elements: false,
+        document: false, 
+        eventLag: false,
+        restartOnRequestAfter: false,
+        restartOnPushState: false,
     }
 });
 
@@ -291,10 +296,13 @@ function goToRevisedPage() {
 // add iframe on point click if we are showing frames
 $('.pulse').click(function (e) {
     let slug = $(this).children().first().attr('id')
-
+    let last = ''
+    if (guide) {
+        last = '?guide=true'
+    }
     if (!$('.popup-' + slug).children().first().children().first().children().last().is('iframe')
         && frames){
-         $('.popup-' + slug).children().first().children().first().append('<iframe src="details/' + slug + '" class="rounded details-frame"></iframe>')
+         $('.popup-' + slug).children().first().children().first().append('<iframe src="details/' + slug + last +'" class="rounded details-frame"></iframe>')
     }
   
 })
@@ -321,7 +329,7 @@ function incrementStep() {
         } else {
             $(this).css('display', 'block')
             $(this).css('animation', 'pulse 2s infinite')
-            $(this).children().first().tooltip('show')
+            //$($(this).children().first()[0]).tooltip('show')
         }
     })
 
@@ -335,11 +343,13 @@ function incrementStep() {
 
     if (stepNumber + 1 >= locationsJSON.length) {
         // we are done with the tour 
+        guide = false
         window.history.replaceState('', '', updateURLParameter(window.location.href, 'step', ''));
         window.history.replaceState('', '', updateURLParameter(window.location.href, 'question-guide', 'false'));
         // add an event listener for the close of the target modal 
         $('.popup-' + target).on('hidden.bs.modal', function (e) {
             $('.pulse').css('display', 'block')
+            $('.pulse').css('animation', 'none')
         })
 
     } else {
@@ -353,6 +363,11 @@ function incrementStep() {
             $('#guide').modal('show')
         })
     }
+
+    setTimeout(function(){
+        // show the tooltip
+        $('#' + target).tooltip('show')
+    }, 500)
     
 }
 
@@ -374,7 +389,6 @@ function skipNextStep() {
     window.history.replaceState('', '', updateURLParameter(window.location.href, 'step', stepNumber.toString()));
 
 }
-
 
 
 
