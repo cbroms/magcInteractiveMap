@@ -14,12 +14,17 @@
         background-color: #e8ebef;
     }
 </style>
+
+
+{% load static %}
+<script type="text/javascript" src="{% static "pace.min.js" %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static "pace.css" %}">
+
 {% endblock %}
 
 {% block content %}
 
-    {% load static %}
-<div class="container-fluid" style="background-color:#e8ebef;">
+<div class="container-fluid hidden" style="background-color:#e8ebef;">
     <div class="container native" style="">
         <img src="{{ point.main_image.url }}" class="img-fluid center-block main-image rounded" style="width:100%;position:sticky; top:0px; z-index:-1000;">
     </div>

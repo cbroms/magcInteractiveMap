@@ -135,5 +135,32 @@ class Info(models.Model):
         return 'About and Credits'
 
 
+#  model for any kind of tour of the map
+class Tour(models.Model):     
+    name = models.CharField(max_length=40, null=True)
+    locations = models.ManyToManyField('mapApplication.Point',
+                                      through='mapApplication.TourLocation')
+
+    def get_locations(self):
+        return self.locations.order_by('location_link')
+
+    def __str__(self):
+            return self.name
+
+# for each of the locations of the tour
+class TourLocation(models.Model):
+    text = models.CharField(max_length=150, null=True)
+    tour = models.ForeignKey('mapApplication.Tour', on_delete=models.CASCADE)
+    location = models.ForeignKey('mapApplication.Point', related_name='location_link', on_delete=models.CASCADE)
+    order = models.PositiveIntegerField()
+
+    class Meta:
+        ordering = ('order',)
+
+    def __str__(self):
+            return self.text
+
+
+
 
 

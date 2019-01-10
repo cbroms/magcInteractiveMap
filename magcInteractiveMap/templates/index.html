@@ -40,43 +40,20 @@ i {
         </div>
         <h1 style="margin-bottom: 40px; color:#4B577D;">interactive map</h1>
         <h6 style="margin-bottom: 80px; max-width: 350px; color: #4B577D;">Learn about the history and unique features of the Marin Art & Garden Center </h6>
-        <a href="#using-the-map">
-            <button class="btn shadow" style="background-color:#4B577D; color: white;padding: 15px;">Get Started!</button>
-        </a>
+      <!--  <a href="#using-the-map"> -->
+            <button 
+                class="btn shadow" 
+                style="background-color:#4B577D; color: white;padding: 15px;" 
+                onclick="window.location.href='/map?demo=True'">Explore myself</button>
+
+            <button 
+                class="btn shadow" 
+                style="background-color:#4B577D; color: white;padding: 15px;" 
+                onclick="window.location.href='/map?demo=True&question-guide=True'">Take a tour</button>
+     <!--   </a> -->
         </div>
 
     </div>
-    <div class="container" style="padding: 25px; padding-top: 10%; height: 100vh;" id="using-the-map">
-    <h2 style="color:#4B577D;">Using the Map</h2>
-    <div class="container " style="margin: 10% 0;">
-            <div class="row">
-                <div class="col-sm">
-                    <div class="outline-desc rounded">
-                    <h4 ><i class="fas fa-map"></i>  Navigate</h4>
-                    <h6>Pinch to zoom and scroll around the map to look for highlighted points of interest</h6>
-                    </div>
-                </div>
-                <div class="col-sm">
-                    <div class="outline-desc rounded">
-                    <h4><i class="fas fa-hand-pointer"></i>  Select</h4>
-                    <h6>Click or tap on any point on the map to learn more about it</h6>
-                    </div>
-                </div>
-                <div class="col-sm">
-                   <div class="outline-desc rounded">
-                    <h4><i class="fas fa-tags"></i>  Filter</h4>
-                    <h6>Filter the points on the map with categories such as "Gardens" and "Historical Features"</h6>
-                    </div>
-                </div>
-            </div>
-        </div>
-       
-            <button class="btn shadow center-block" 
-                    style="background-color: #F79548;padding: 15px;"
-                    onclick="window.location.href='/map'">Start Exploring →</button>
-      
-    </div>
-
 
 {% endblock %}
 

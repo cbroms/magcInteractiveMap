@@ -24,6 +24,85 @@ body, html {
 
     {% load helpers %}
 
+    <!-- demo modal -->
+    <div class="modal fade" id="demo" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <div class="demo-container">
+                        <span class="demo-content" id="demo-1">
+                            <div class="outline-desc rounded">
+                                <h4 ><i class="fas fa-map"></i>  Navigate the Map</h4>
+                                <h6><b>On Mobile:</b><br>Pinch to zoom and drag to pan around the map. <br> <br> 
+                                    <b>On Desktop:</b><br> Use mousewheel or two-finger drag to zoom, and hold and drag to pan around the map.</h6>
+                            </div>
+                            <button class="btn shadow demo-button" style="background-color:#4B577D; color: white;padding: 15px;" onclick="nextDemo(this)">Continue &rarr;</button>
+                        </span>
+
+                        <span class="demo-content" id="demo-2">
+                            <div class="outline-desc rounded">
+                                <h4 ><i class="fas fa-hand-pointer"></i>  Select Points</h4>
+                                <h6>Points of interest are denoted with colored circles. Tap or click on them to reveal their description, history, and photos.</h6>
+                            </div>
+                            <button class="btn shadow demo-button" style="background-color:#4B577D; color: white;padding: 15px;" id="before-filter" onclick="nextDemo(this)">Continue &rarr;</button>
+                        </span>
+
+                        <span class="demo-content" id="demo-3">
+                            <div class="outline-desc rounded">
+                                <h4><i class="fas fa-tags"></i>  Customize Your Experience</h4>
+                                <h6>Toggle topics of interest to filter which points you see. These can be changed later in the menu.</h6>
+
+                                <div class="container rounded tags-container" style="margin: 0 auto;">
+        {% for tag in tags %}
+            {% if tag.name in selections %}
+            <div class="button-group">
+            <button type="button" class="btn active btn-{{ tag.slug }} smaller" 
+                    data-toggle="button" 
+                    aria-pressed="true"
+                    onclick="activateButton('{{ tag.slug }}')"
+                    style="background-color:{{ tag.color }}80;opacity: 0.4;" 
+                    ><i class="fas fa-plus"></i>
+                </button>
+                    <button type="button" class="btn active btn-{{ tag.slug }} " 
+                    data-toggle="button" 
+                    aria-pressed="true"
+                    onclick="activateButton('{{ tag.slug }}')"
+                    style="background-color:{{ tag.color }}80;  opacity: 0.4; width: 180px;" 
+                    >
+                    {{tag.name}}
+                </button>
+            </div>
+            {% else %}
+             <button type="button" class="btn btn-{{ tag.slug }} smaller" 
+                    data-toggle="button" 
+                    aria-pressed="true"
+                    onclick="deactivateButton('{{ tag.slug }}')"
+                    style="background-color:{{ tag.color }}80; width: 40px; " 
+                    ><i class="fas fa-times"></i>
+                </button>
+                <button type="button" class="btn btn-{{ tag.slug }}" 
+                    data-toggle="button" 
+                    aria-pressed="false"
+                    onclick="deactivateButton('{{ tag.slug }}')"
+                    style="background-color:{{ tag.color }}80; width: 180px;" 
+                    >
+                    {{tag.name}}
+                </button>
+            {% endif %}
+        {% endfor %}
+        </div>
+                            </div>
+                            <button class="btn shadow demo-button" style="background-color:#4B577D; color: white;padding: 15px;" onclick="goToRevisedPage()">Get Started! &rarr;</button>
+                        </span>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
     <!-- Sidebar  -->
     <nav id="sidebar">
         <div class="sidebar-header">
@@ -44,14 +123,14 @@ body, html {
                     data-toggle="button" 
                     aria-pressed="true"
                     onclick="window.location.href='{% value_in_url tag.slug request.GET.urlencode %}'"
-                    style="background-color:{{ tag.color }}33;opacity: 0.4;" 
+                    style="background-color:{{ tag.color }}80;opacity: 0.4;" 
                     ><i class="fas fa-plus"></i>
                 </button>
                     <button type="button" class="btn active  " 
                     data-toggle="button" 
                     aria-pressed="true"
                     onclick="window.location.href='{% value_in_url tag.slug request.GET.urlencode %}'"
-                    style="background-color:{{ tag.color }}33;  opacity: 0.4; width: 180px;" 
+                    style="background-color:{{ tag.color }}80;  opacity: 0.4; width: 180px;" 
                     >
                     {{tag.name}}
                 </button>
@@ -61,27 +140,28 @@ body, html {
                     data-toggle="button" 
                     aria-pressed="true"
                     onclick="window.location.href='{% value_in_url tag.slug request.GET.urlencode %}'"
-                    style="background-color:{{ tag.color }}33; width: 40px; " 
+                    style="background-color:{{ tag.color }}80; width: 40px; " 
                     ><i class="fas fa-times"></i>
                 </button>
                 <button type="button" class="btn" 
                     data-toggle="button" 
                     aria-pressed="false"
                     onclick="window.location.href='{% value_in_url tag.slug request.GET.urlencode %}'"
-                    style="background-color:{{ tag.color }}33; width: 180px;" 
+                    style="background-color:{{ tag.color }}80; width: 180px;" 
                     >
                     {{tag.name}}
                 </button>
             {% endif %}
         {% endfor %}
+        {% with demo='demo' %}
         </div>
         <div class="container rounded tags-container">
             <h5>Help</h5>
             <hr>    
             <button type="button" class="btn btn-block" 
+                    id="using-the-map"
                     data-toggle="button" 
                     aria-pressed="false"
-                    onclick="window.location.href='/#using-the-map'" 
                     style="background-color:#4B577D33;"
                     > Using the Map →
                 </button>
@@ -93,6 +173,7 @@ body, html {
                     > MAGC Home →
                 </button>
         </div>
+        {% endwith %}
 
         <div class="container rounded tags-container">
             <h5>More</h5>
@@ -152,17 +233,46 @@ body, html {
     <!-- Popup windows for each point on the map (only if not mobile/tablet to speed up page) -->
     {% if frames %}
     {% for point in points %}
-        <div class="modal fade popup-{{ point.slug }}" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal fade popup-{{ point.slug }} popup" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg preloaded-modal" role="document">
+                <div class="modal-content">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <!-- <iframe src="details/{{ point.slug }}" class="rounded details-frame"></iframe> -->
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    {% if guide %}
+    <!-- Popup window for the guide  -->
+    <div class="modal fade popup" tabindex="-1" role="dialog" aria-hidden="true" id="guide">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <i class="fas fa-times"></i>
                     </button>
-                    <iframe src="details/{{ point.slug }}" class="rounded details-frame"></iframe>
+
+                    <div class="guide-container">
+
+                    <h6 id="guide-title">Next Point:</h6>
+                    <div id="guide-content">
+                        
+                    </div>
+
+                    <div id="guide-buttons">
+                        <button class="btn shadow" style="background-color:#4B577D; color: white;padding: 15px;" onclick="incrementStep()">Reveal Point &rarr;</button>
+
+                        <button class="btn shadow" id="skip" style="background-color:#4B577D33;; color: black; padding: 15px;" onclick="skipNextStep()">Skip</button>
+                    </div>
+                    </div>
                 </div>
             </div>
         </div>
-    {% endfor %}
+
+
+    {% endif %}
     
 
     <!-- Popup window for credits and about -->
@@ -191,6 +301,10 @@ body, html {
     let colors = {{ pointColors | js }};
     let open = {{ open | js }};
     let frames = {{ frames | js }};
+    let demo = {{ demo | js }};
+    let guide = {{ guide| js }};
+    var locations = {{ locations | js }};
+    var locationsText = {{ locationsText | js }}
  
 </script>
 <script type="text/javascript" src="{% static "map.js" %}"></script>

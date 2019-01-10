@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, Http404
-from .models import Point, Map, Tag, Info
+from .models import Point, Map, Tag, Info, Tour, TourLocation
 from django.forms.models import model_to_dict
+from django.core import serializers
 
 def index(request):
     try:
@@ -9,6 +10,30 @@ def index(request):
         tagObjects = Tag.objects.all().values() # get all tag objects
         queryTagsSelected = []
         queryTags = []
+        showDemo = False
+        showGuide = False
+        locations = None
+        tourText = None
+        
+
+        # determine if we should show the demo
+        demo = request.GET.get('demo', '')
+
+        if demo.lower() == 'true':
+            showDemo = True
+
+        # determine if we should show the question tour
+        guide = request.GET.get('question-guide', '')
+
+        if guide.lower() == 'true':
+            showGuide = True
+            tour = Tour.objects.filter(name="Question Guide")[0]
+            tourLocations = TourLocation.objects.filter(tour=tour)
+            # should probably do this some other way so we don't have
+            # to pass so much data when all we need is the slugs
+            locations = serializers.serialize('json', tour.get_locations())
+            tourText = serializers.serialize('json', tourLocations)
+
 
         for tag in tagObjects:
             # add tag to list of tags to be passed to template
@@ -64,7 +89,11 @@ def index(request):
                                         'points': pts, 
                                         'pointColors': colors, 
                                         'open': openId,
-                                        'frames': showIFrames,})
+                                        'frames': showIFrames,
+                                        'demo': showDemo,
+                                        'guide': showGuide,
+                                        'locations': locations,
+                                        'locationsText': tourText})
 
 def details(request, id):
     pt = get_object_or_404(Point, slug=id)

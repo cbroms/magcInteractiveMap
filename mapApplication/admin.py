@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Point, Tag, Map, Info
+from .models import Point, Tag, Map, Info, Tour, TourLocation
 
 class PointAdmin(admin.ModelAdmin):
     
@@ -13,3 +13,6 @@ admin.site.register(Point, PointAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Map)
 admin.site.register(Info)
+
+admin.site.register(Tour)
+admin.site.register(TourLocation)

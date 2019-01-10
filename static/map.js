@@ -1,3 +1,8 @@
+// global vars 
+var panArea;
+var stepNumber = 0;
+var locationsTextJSON;
+var locationsJSON;
 
 
 $(window).resize(function() {
@@ -27,13 +32,16 @@ $(document).ready(function() {
             );
     }
 
-    $('#sidebarCollapse').on('click', function () {
+    $('#sidebarCollapse').click(function () {
         $('#sidebar').toggleClass('closed');
-    });
-
-    $('#sidebarCollapse').on('click', function () {
         $('#sidebarCollapse').toggleClass('side');
     });
+
+    $('#using-the-map').click(function(){
+        $('#sidebar').toggleClass('closed');
+        $('#sidebarCollapse').toggleClass('side');
+        $('#demo').modal('show')
+    })
 
     // set the colors of each point
     for (key in colors) {
@@ -56,7 +64,7 @@ $(document).ready(function() {
 
     
     // init panzoom 
-    let panArea = panzoom(document.querySelector('.zoomable'), {
+    panArea = panzoom(document.querySelector('.zoomable'), {
         maxZoom: 0.99,
         minZoom: 0.2,
         zoomSpeed: 0.05,
@@ -93,49 +101,84 @@ $(document).ready(function() {
 
     // select pan area and set og x and y pos
     let $touchArea = $('.zoomable'),
-    touchStarted = false, 
-    currX = 0,
-    currY = 0,
-    cachedX = 0,
-    cachedY = 0;
+        touchStarted = false, 
+        currX = 0,
+        currY = 0,
+        cachedX = 0,
+        cachedY = 0;
 
-var getPointerEvent = function(event) {
+    let getPointerEvent = function(event) {
         return event.originalEvent.targetTouches ? event.originalEvent.targetTouches[0] : event;
     };
 
 
-// detect swipes vs clicks on mobile
-$touchArea.on('touchstart mousedown', function (e){
+    // detect swipes vs clicks on mobile
+    $touchArea.on('touchstart mousedown', function (e){
    
-    let pointer = getPointerEvent(e);
-    // caching the current x
-    cachedX = currX = pointer.pageX;
-    // caching the current y
-    cachedY = currY = pointer.pageY;
-    // a touch event is detected      
-    touchStarted = true;
+        let pointer = getPointerEvent(e);
+        // caching the current x
+        cachedX = currX = pointer.pageX;
+        // caching the current y
+        cachedY = currY = pointer.pageY;
+        // a touch event is detected      
+        touchStarted = true;
 
 
-});
+    });
 
-$touchArea.on('touchend mouseup touchcancel', function (e){
-    e.preventDefault();
-    // touch finished
-    touchStarted = false;
+    $touchArea.on('touchend mouseup touchcancel', function (e){
+        e.preventDefault();
+        // touch finished
+        touchStarted = false;
 
-});
+    });
 
-$touchArea.on('touchmove mousemove', function (e){
-    e.preventDefault();
-    let pointer = getPointerEvent(e);
-    currX = pointer.pageX;
-    currY = pointer.pageY;
-    if (touchStarted) {
+    $touchArea.on('touchmove mousemove', function (e){
+        e.preventDefault();
+        let pointer = getPointerEvent(e);
+        currX = pointer.pageX;
+        currY = pointer.pageY;
+        if (touchStarted) {
          // swiping
 
-     }
- });
+        }
+    });
 
+    // get url and make new url object 
+    let currUrl = new URL(window.location.href)
+
+    // if we are showing a guide, set the step variable accordingly 
+    if (guide){
+        locationsJSON = JSON.parse(locations)
+        locationsTextJSON = JSON.parse(locationsText)
+        let step = parseInt(currUrl.searchParams.get("guide-step"))
+
+        // if the step is specified
+        if (step != undefined && step < locationsJSON.length && step >= 0) {
+            stepNumber = step;
+            $('#guide-content').html(locationsTextJSON[stepNumber].fields.text)
+            if (demo) {
+                $('#before-filter').attr('onclick', 'showGuide();');
+            } else {
+                showGuide()
+            }
+
+        } else {
+            stepNumber = 0;
+            $('#guide-content').html(locationsTextJSON[0].fields.text)
+            // set the step to 0 and add to url 
+            window.history.replaceState('', '', updateURLParameter(window.location.href, 'step', '0'));
+
+            if (demo) {
+                $('#before-filter').attr('onclick', 'showGuide();');
+            } else {
+                showGuide()
+            }
+            
+        }
+
+    }
+    
 
 });
 
@@ -143,6 +186,8 @@ $touchArea.on('touchmove mousemove', function (e){
 Pace.on("done", () => {
     $("#map").removeClass("hidden");
     $("#clickElements").removeClass("hidden");
+
+    console.log("app revealed")
 
     // open a modal by default if requested in url (for touch)
     if (!frames && open != "") {
@@ -152,7 +197,187 @@ Pace.on("done", () => {
     if ($('.popup-' + open ).length > 0) {
         $('.popup-' + open ).modal('show');
     }
+
+    // if there is a demo box, show it 
+    if (demo) {
+        $('#demo').modal('show')
+        demo = false;
+        // when demo is closed, remove demo param from url 
+        $('#demo').on('hidden.bs.modal', function (e) {
+            window.history.replaceState('', '', updateURLParameter(window.location.href, 'demo', 'false'));
+        })
+    }
+
+    // disable Pace
+    Pace.options = {
+        ajax: false
+    }
 });
+
+// function called when clicking next arrow on demo modal 
+// changes content to the next up content
+function nextDemo(e) {
+    let parent = $(e).parent()[0]
+    let num = ($(parent).attr('id')).split('demo-')[1]
+    $(parent).fadeOut(600, function(){
+        $('#demo-' + (parseInt(num) + 1).toString()).fadeIn(600).css("display","block");
+    })
+    
+}
+
+//http://stackoverflow.com/a/10997390/11236
+// update a certain parameter in the url 
+function updateURLParameter(url, param, paramVal){
+    let newAdditionalURL = "";
+    let tempArray = url.split("?");
+    let baseURL = tempArray[0];
+    let additionalURL = tempArray[1];
+    let temp = "";
+    if (additionalURL) {
+        tempArray = additionalURL.split("&");
+        for (let i = 0; i < tempArray.length; i++){
+            if (tempArray[i].split('=')[0] != param){
+                newAdditionalURL += temp + tempArray[i];
+                temp = "&";
+            }
+        }
+    }
+
+    let rows_txt = temp + "" + param + "=" + paramVal;
+    return baseURL + "?" + newAdditionalURL + rows_txt;
+}
+
+// if any of the filters in the demo panel are changed, this variable 
+// changes to true, so we know to reload the page with the revised filters
+var demoOptionsChanged = false;
+
+function deactivateButton(name) {
+    demoOptionsChanged = true;
+    $('.btn-' + name).animate({opacity: 0.4}, 400)
+    $('.btn-' + name).attr('onclick', 'activateButton("' + name + '");');
+    $('.btn-' + name).filter('.smaller').html('<i class="fas fa-plus"></i>')
+}
+
+function activateButton(name) {
+    demoOptionsChanged = true;
+    $('.btn-' + name).animate({opacity: 1}, 400)
+    $('.btn-' + name).attr('onclick', 'deactivateButton("' + name + '");');
+    $('.btn-' + name).filter('.smaller').html('<i class="fas fa-times"></i>')
+}
+
+function goToRevisedPage() {
+    if (demoOptionsChanged) {
+        let remove = []
+        $('.smaller').each(function(){
+
+            if ($(this).css('opacity') != 1) {
+                let classes = $(this).attr('class')
+                let slug = (classes.split('btn-')[1]).split(' ')[0]
+                remove.push(slug)
+            }
+        })
+        let full = '?'
+        for (let i = 0; i < remove.length; i++) {
+            full = full + remove[i] + '=False&'
+        }   
+        window.location.href = full
+    } else {
+        $('#demo').modal('hide')
+    }
+
+}
+
+
+// add iframe on point click if we are showing frames
+$('.pulse').click(function (e) {
+    let slug = $(this).children().first().attr('id')
+
+    if (!$('.popup-' + slug).children().first().children().first().children().last().is('iframe')
+        && frames){
+         $('.popup-' + slug).children().first().children().first().append('<iframe src="details/' + slug + '" class="rounded details-frame"></iframe>')
+    }
+  
+})
+
+// called from the second to last demo button so we don't get 
+// the option to filter out points 
+function showGuide(){
+    $('#demo').modal('hide')
+    $('#guide').modal('show')
+}
+
+
+// go to next step  
+function incrementStep() {
+
+    // highlight the point and remove all others 
+    let target = locationsJSON[stepNumber].fields.slug
+
+    $('.pulse').each(function(){
+        if ($(this).children().first().attr('id') != target) {
+            $(this).css('display', 'none')
+            $(this).children().first().tooltip('hide')
+            $(this).css('animation', 'none')
+        } else {
+            $(this).css('display', 'block')
+            $(this).css('animation', 'pulse 2s infinite')
+            $(this).children().first().tooltip('show')
+        }
+    })
+
+    // close guide 
+    $('#guide').modal('hide')
+
+    if (stepNumber + 2 >= locationsJSON.length) {
+        // remove the skip button
+        $('#skip').css('display', 'none')
+    }
+
+    if (stepNumber + 1 >= locationsJSON.length) {
+        // we are done with the tour 
+        window.history.replaceState('', '', updateURLParameter(window.location.href, 'step', ''));
+        window.history.replaceState('', '', updateURLParameter(window.location.href, 'question-guide', 'false'));
+        // add an event listener for the close of the target modal 
+        $('.popup-' + target).on('hidden.bs.modal', function (e) {
+            $('.pulse').css('display', 'block')
+        })
+
+    } else {
+        stepNumber += 1 
+        $('#guide-content').html(locationsTextJSON[stepNumber].fields.text)
+         // change the url param to new stepNumber 
+        window.history.replaceState('', '', updateURLParameter(window.location.href, 'step', stepNumber.toString()));
+
+        // add an event listener for the close of the target modal 
+        $('.popup-' + target).on('hidden.bs.modal', function (e) {
+            $('#guide').modal('show')
+        })
+    }
+    
+}
+
+
+// skip the next step 
+function skipNextStep() {
+
+    if (stepNumber + 2 >= locationsJSON.length) {
+        // we are done with the tour 
+        // remove the skip button
+        $('#skip').css('display', 'none')
+        // we are done with the tour 
+        // window.history.replaceState('', '', updateURLParameter(window.location.href, 'step', ''));
+        // window.history.replaceState('', '', updateURLParameter(window.location.href, 'question-guide', 'false'));
+    }
+    stepNumber += 1
+    $('#guide-content').html(locationsTextJSON[stepNumber].fields.text)
+    // change the url param to new stepNumber 
+    window.history.replaceState('', '', updateURLParameter(window.location.href, 'step', stepNumber.toString()));
+
+}
+
+
+
+
 
 
 

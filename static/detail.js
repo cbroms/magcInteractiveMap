@@ -104,14 +104,18 @@ function SelectText(element) {
     }
 }
 
-$(".copyable").click((e) => {
+$(".copyable").click(function() {
             
   $(this).attr("contenteditable", true);
-    
-    SelectText($(this).get(0));
+    SelectText(this);
     document.execCommand('copy');
     window.getSelection().removeAllRanges();
     $(this).removeAttr("contenteditable");
     alert("Copied to clipboard!");
 });
 
+
+// reveal the frame when loading is done 
+Pace.on("done", () => {
+    $(".container-fluid").removeClass("hidden");
+});

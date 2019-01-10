@@ -17,6 +17,20 @@ def value_in_url(value, url):
     else:
         return '?' + value + '=False'
 
+# add value to url
+@register.simple_tag
+def add_to_url(value, url):
+    if url:
+        queriesSplit = url.split('&')
+        for query in queriesSplit:
+            if value in query:
+                return '?' + url.replace(value + '=False', value + '=True')
+            elif value in query.lower():
+                return '?' + url.replace(value + '=false', value + '=True')
+        return '?' + url + '&' + value + '=True'
+    else:
+        return '?' + value + '=True'
+
 # json encode a python object for use in javascript
 @register.filter(is_safe=True)
 def js(self):

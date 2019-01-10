@@ -100,6 +100,12 @@ p {
     opacity: 0;
 }
 
+.container-fluid{
+  -webkit-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    transition: all 1s ease;
+}
+
 #map {
     -webkit-transition: all 1s ease;
     -o-transition: all 1s ease;
@@ -322,12 +328,12 @@ iframe{
     position: fixed;
     min-height: 100vh;
     height: auto;
-    z-index: 100;
+    z-index: 2000;
 }
 
 .sidebar-content {
     overflow-y: scroll;
-    height: 600px;
+    height: calc(100vh - 220px);
 }
 .tags-container {
     width: 260px;
@@ -347,7 +353,8 @@ hr {
     margin-left: -290px;
 }
 */
-#sidebar .sidebar-header {
+.sidebar-header {
+    height: 220px;
     padding: 20px;
     background: #e8ebef;
     position: relative;
@@ -364,6 +371,75 @@ hr {
             transform: translateY(-50%);
 }
 
+#guide-buttons {
+  margin: 30px auto;
+  display: block;
+  width: 220px;
+}
+
+#guide-title {
+  text-align: center;
+}
+
+#guide-content {
+  text-align: center;
+  font-family: "Chivo";
+  font-weight: 700;
+  color:#4B577D;
+  font-size: 1.25rem;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.demo-content {
+  display: block;
+  display: none;
+  margin-top: auto;
+  margin-bottom: 60px;
+}
+
+.demo-container {
+  height: 670px;
+  padding: 20px;
+  background-color: #e8ebef;
+  border-radius: 5px;
+}
+
+.guide-container {
+  height: 330px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 30px;
+  background-color: #e8ebef;
+  border-radius: 5px;
+}
+
+.demo-button {
+  display: block;
+  margin: 20px auto;
+}
+
+#demo-1 {
+  display: block;
+}
+
+.preloaded-modal {
+  height: 90vh;
+  background-color: #e8ebef;
+}
+
+iframe {
+  height: 90vh;
+}
+
+h4 {
+  margin: 30px auto;
+}
+
+h6 {
+  max-width: 350px;
+  margin: 30px auto;
+}
 #content {
     width: 100%;
     padding: 20px;
@@ -408,13 +484,8 @@ hr {
   background: rgba(255,255,255,.5);
   -webkit-box-shadow: 0 0 0 rgba(255,255,255,1);
           box-shadow: 0 0 0 rgba(255,255,255,1);
-  -webkit-animation: pulse 2s infinite;
-          animation: pulse 2s infinite;
 }
-.pulse:hover {
-  -webkit-animation: none;
-          animation: none;
-}
+
 
 @-webkit-keyframes pulse {
   0% {
