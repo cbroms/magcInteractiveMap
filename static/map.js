@@ -20,6 +20,13 @@ $(window).resize(function() {
 
 $(document).ready(function() {
 
+    // debug 
+
+    // $('div').click(function(){
+    //     var theClassName = this.className;
+    //     alert(theClassName)
+    // })
+
     console.log("app running!")
 
     $(".details-frame").height(
@@ -69,6 +76,7 @@ $(document).ready(function() {
         minZoom: 0.2,
         zoomSpeed: 0.05,
         onTouch: function(e) {
+            console.log('touched')
             return false; // tells the library to not preventDefault.
         }
     });
@@ -87,6 +95,12 @@ $(document).ready(function() {
         } else {
             $('.click-center').tooltip('hide')
         }
+
+
+        // copy the transformation over to the points
+        let matrix = $('.zoomable').first().css('transform')
+
+        $('#clickElements').css('transform', matrix)
     });
 
 
@@ -122,6 +136,9 @@ $(document).ready(function() {
         cachedY = currY = pointer.pageY;
         // a touch event is detected      
         touchStarted = true;
+        console.log('touch started')
+        //panArea.resume()
+
 
 
     });
@@ -130,6 +147,8 @@ $(document).ready(function() {
         e.preventDefault();
         // touch finished
         touchStarted = false;
+        console.log('touch finished')
+        //panArea.pause()
 
     });
 
@@ -140,6 +159,7 @@ $(document).ready(function() {
         currY = pointer.pageY;
         if (touchStarted) {
          // swiping
+         console.log('touch in-progress')
 
         }
     });

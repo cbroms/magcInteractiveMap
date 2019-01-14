@@ -112,12 +112,12 @@ function closeDetails() {
 
     <!-- Sidebar  -->
     <nav id="sidebar">
-        <div class="sidebar-header">
+        <!-- <div class="sidebar-header">
             <div class="logo-title">
                 <h3>marin art & garden center</h3>
             </div>
             <h3 style="color:#4B577D;">interactive map</h3>
-        </div>
+        </div> -->
         <div class="sidebar-content">   
 
         <div class="container rounded tags-container">
@@ -126,42 +126,44 @@ function closeDetails() {
         {% for tag in tags %}
             {% if tag.name in selections %}
             <div class="button-group">
-            <button type="button" class="btn active" 
+            <button type="button" class="btn active btn-{{ tag.slug }} smaller" 
                     data-toggle="button" 
                     aria-pressed="true"
-                    onclick="window.location.href='{% value_in_url tag.slug request.GET.urlencode %}'"
+                    onclick="activateButton('{{ tag.slug }}')"
                     style="background-color:{{ tag.color }}80;opacity: 0.4;" 
                     ><i class="fas fa-plus"></i>
                 </button>
-                    <button type="button" class="btn active  " 
+                    <button type="button" class="btn active btn-{{ tag.slug }} " 
                     data-toggle="button" 
                     aria-pressed="true"
-                    onclick="window.location.href='{% value_in_url tag.slug request.GET.urlencode %}'"
+                    onclick="activateButton('{{ tag.slug }}')"
                     style="background-color:{{ tag.color }}80;  opacity: 0.4; width: 180px;" 
                     >
                     {{tag.name}}
                 </button>
             </div>
             {% else %}
-             <button type="button" class="btn" 
+             <button type="button" class="btn btn-{{ tag.slug }} smaller" 
                     data-toggle="button" 
                     aria-pressed="true"
-                    onclick="window.location.href='{% value_in_url tag.slug request.GET.urlencode %}'"
+                    onclick="deactivateButton('{{ tag.slug }}')"
                     style="background-color:{{ tag.color }}80; width: 40px; " 
                     ><i class="fas fa-times"></i>
                 </button>
-                <button type="button" class="btn" 
+                <button type="button" class="btn btn-{{ tag.slug }}" 
                     data-toggle="button" 
                     aria-pressed="false"
-                    onclick="window.location.href='{% value_in_url tag.slug request.GET.urlencode %}'"
+                    onclick="deactivateButton('{{ tag.slug }}')"
                     style="background-color:{{ tag.color }}80; width: 180px;" 
                     >
                     {{tag.name}}
                 </button>
             {% endif %}
+
         {% endfor %}
-        {% with demo='demo' %}
+        <button class="btn shadow demo-button" style="background-color:#4B577D; color: white;padding: 15px;" onclick="goToRevisedPage()">Apply &rarr;</button>
         </div>
+
         <div class="container rounded tags-container">
             <h5>Help</h5>
             <hr>    
@@ -180,7 +182,6 @@ function closeDetails() {
                     > MAGC Home →
                 </button>
         </div>
-        {% endwith %}
 
         <div class="container rounded tags-container">
             <h5>More</h5>
@@ -207,13 +208,17 @@ function closeDetails() {
     <!-- Map Content -->
 
     <div class="parent" style="overflow: hidden; position: relative;">
-    <div class='zoomable' >
-        <div class="rotated" style="transform: rotate(-61deg);">
+    <!-- <div class='zoomable' > -->
+     
             <!-- Map -->
-            <img src="{{ map.image.url }}" id="map" class="hidden" height="{{ map.image.height }}px" width=" {{ map.image.width }}px" >
-    
+            <div class="zoomable">
+                <div class="rotated">
+                    <img src="{{ map.image.url }}" id="map" class="hidden" height="{{ map.image.height }}px" width=" {{ map.image.width }}px" >
+                </div>
+            </div>
             <!-- Clickable buttons drawn over map-->
-            <div id="clickElements" class="hidden">
+            <div id="clickElements" class="hidden"  style='height: {{ map.image.height }}px; width: {{ map.image.width }}px;'>
+                <div class="rotated">
                 {% for point in points %}
                     <button type="button" class="btn click pulse" data-toggle="modal" 
                             {% if frames %}
@@ -233,15 +238,16 @@ function closeDetails() {
                     </button>
 
                 {% endfor %}
+                </div>
             </div>
         </div>
-    </div>
+   <!--  </div> -->
     </div>
     <!-- Popup windows for each point on the map (only if not mobile/tablet to speed up page) -->
     {% if frames %}
     {% for point in points %}
         <div class="modal fade popup-{{ point.slug }} popup" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-lg preloaded-modal" role="document">
+            <div class="modal-dialog modal-lg preloaded-modal rounded" role="document">
                 <div class="modal-content">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <i class="fas fa-times"></i>
@@ -250,6 +256,7 @@ function closeDetails() {
             </div>
         </div>
     {% endfor %}
+    {% endif %}
 
     {% if guide %}
     <!-- Popup window for the guide  -->
@@ -293,8 +300,7 @@ function closeDetails() {
             </div>
         </div>
 
-    {% endif %}
-
+    
 {% endblock %}
 
 {% block scripts%}

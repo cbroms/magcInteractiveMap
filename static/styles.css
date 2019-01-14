@@ -110,12 +110,28 @@ p {
     -webkit-transition: all 1s ease;
     -o-transition: all 1s ease;
     transition: all 1s ease;
+    z-index: -2;
 }
 
 #clickElements {
-     -webkit-transition: all 1s ease;
+/*     -webkit-transition: all 1s ease;
     -o-transition: all 1s ease;
-    transition: all 1s ease;
+    transition: all 1s ease;*/
+    transform-origin: 0px 0px 0px;
+    top: 0;
+    position: absolute;
+    cursor: move;
+
+}
+
+#clickElements:active { 
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+.rotated {
+  /*transform: rotate(-61deg);*/
 }
 
 .center-block{
@@ -193,10 +209,10 @@ p {
 .container {
     padding: 0;
 }
-
+/*
 ::-webkit-scrollbar { 
     display: none; 
-}
+}*/
 
 iframe{
     /*overflow:hidden;*/
@@ -334,7 +350,7 @@ iframe{
 
 .sidebar-content {
     overflow-y: scroll;
-    height: calc(100vh - 220px);
+    height: 100vh; /*calc(100vh - 220px);*/
 }
 .tags-container {
     width: 260px;
@@ -422,6 +438,28 @@ hr {
 
 #demo-1 {
   display: block;
+}
+
+#controls {
+/*  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  transform: tranlate(-50%, -50%)*/
+}
+
+.right-btn {
+  position: absolute;
+  right: 0;
+  top: 45%;
+  transform: translateY(-50%);
+}
+
+.left-btn {
+  position: absolute;
+  left: 0;
+  top: 45%;
+  transform: translateY(-50%);
 }
 
 .preloaded-modal {
@@ -518,11 +556,92 @@ h6 {
   }
 }
 
-h7 {
-    font-family: "Chivo";
-    font-weight: 700;
-    margin-bottom: 20px;
-    color: #4B577D;
+/* Dots */
+.slick-dotted.slick-slider
+{
+    margin-bottom: 30px;
+}
 
+.slick-dots
+{
+    position: absolute;
+    bottom: -25px;
 
+    display: block;
+
+    width: 100%;
+    padding: 0;
+    margin: 0;
+
+    list-style: none;
+
+    text-align: center;
+}
+.slick-dots li
+{
+    position: relative;
+
+    display: inline-block;
+
+    width: 25px;
+    height: 25px;
+    margin: 0 5px;
+    padding: 0;
+
+    cursor: pointer;
+}
+.slick-dots li button
+{
+    font-size: 0;
+    line-height: 0;
+
+    display: block;
+
+    width: 20px;
+    height: 20px;
+    padding: 5px;
+
+    cursor: pointer;
+
+    color: transparent;
+    border: 0;
+    outline: none;
+    background: transparent;
+}
+.slick-dots li button:hover,
+.slick-dots li button:focus
+{
+    outline: none;
+}
+.slick-dots li button:hover:before,
+.slick-dots li button:focus:before
+{
+    opacity: 1;
+}
+.slick-dots li button:before
+{
+    font-family: 'slick';
+    font-size: 25px;
+    line-height: 25px;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 20px;
+    height: 20px;
+
+    content: '•';
+    text-align: center;
+
+    opacity: .25;
+    color: black;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.slick-dots li.slick-active button:before
+{
+    opacity: .75;
+    color: black;
 }

@@ -34,8 +34,12 @@ window.onload = function() {
     $('.slider').slick({
       centerMode: true,
       centerPadding: '10px',
+      autoplay: true,
+      autoplaySpeed: 3500,
+      dots: true,
       slidesToShow: 1,
       variableWidth: true,
+      appendArrows: '.slider',
       nextArrow: '.right-btn',
       prevArrow: '.left-btn',
       responsive: [

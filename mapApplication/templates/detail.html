@@ -54,18 +54,21 @@
                             <p>{{ caption }}</p>
                         </div>
                     {% endfor %}
+
+                    
                 </div>
 
                 {% if imgNum > 1 %}
 
-                <!-- Image carousel controls -->
-
-                <div class="tags center-block white">
-                    <button class="left-btn btn"><i class="fas fa-caret-left fa-lg"></i></button>
-                    <button class="right-btn btn"><i class="fas fa-caret-right fa-lg"></i></button>
-                </div>
+                    <!-- Image carousel controls -->
+                    <div class="tags center-block" id="controls">
+                        <button class="left-btn btn"><i class="fas fa-caret-left fa-3x"></i></button>
+                        <button class="right-btn btn"><i class="fas fa-caret-right fa-3x"></i></button>
+                    </div>
 
                 {% endif %}
+
+                
 
             {% endif %}
 
