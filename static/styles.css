@@ -110,7 +110,17 @@ p {
     -webkit-transition: all 1s ease;
     -o-transition: all 1s ease;
     transition: all 1s ease;
-    z-index: -2;
+    pointer-events: none;
+
+}
+
+#pointElements {
+  transform-origin: 0px 0px 0px;
+  top: 0;
+  position: absolute;
+  cursor: move;
+  pointer-events: none;
+  z-index: 10;
 }
 
 #clickElements {
@@ -121,13 +131,17 @@ p {
     top: 0;
     position: absolute;
     cursor: move;
-
+    z-index: -1;
 }
 
 #clickElements:active { 
     cursor: grabbing;
     cursor: -moz-grabbing;
     cursor: -webkit-grabbing;
+}
+
+.parent {
+  z-index: -2;
 }
 
 .rotated {
@@ -220,8 +234,9 @@ iframe{
 }
 
 .zoomable {
+    position: relative;
     cursor: move; 
-    z-index: -1;
+    z-index: 1;
 }
 
 
@@ -312,17 +327,7 @@ iframe{
     
 }
 
-#sidebarCollapse {
-    position: fixed;
-    z-index: 101;
-    top: 15px;
-    left: 310px;
-    background-color: #4B577D;
-    border: none;
-    -webkit-transition: all 0.3s;
-    -o-transition: all 0.3s;
-    transition: all 0.3s;
-}
+
 
  .side {
     left: 15px !important;
@@ -350,12 +355,14 @@ iframe{
 
 .sidebar-content {
     overflow-y: scroll;
-    height: 100vh; /*calc(100vh - 220px);*/
+    height: auto; /*calc(100vh - 220px);*/
+    z-index: 2001;
 }
 .tags-container {
     width: 260px;
     margin: 15px;
     padding: 15px;
+    z-index: 2002;
     background-color: #f7faff;
     -webkit-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
             box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
@@ -391,7 +398,7 @@ hr {
 #guide-buttons {
   margin: 30px auto;
   display: block;
-  width: 220px;
+  width: 225px;
 }
 
 #guide-title {
@@ -453,6 +460,7 @@ hr {
   right: 0;
   top: 45%;
   transform: translateY(-50%);
+  background-color: #f7f7f7;
 }
 
 .left-btn {
@@ -460,15 +468,16 @@ hr {
   left: 0;
   top: 45%;
   transform: translateY(-50%);
+  background-color: #f7f7f7;
 }
 
 .preloaded-modal {
-  height: 90vh;
+  height: 85vh;
   background-color: #e8ebef;
 }
 
 iframe {
-  height: 90vh;
+  height: 85vh;
 }
 
 h4 {
@@ -488,36 +497,78 @@ h6 {
     transition: all 0.3s;
 }
 
+#sidebar {
+  margin-left: -290px;
+}
 
-    #sidebar {
-        margin-left: -290px;
-    }
-    #sidebar.closed {
-        margin-left: 0;
-    }
+#sidebar.closed {
+  margin-left: 0;
+}
 
-     #sidebarCollapse {
-        left: 15px;
-     }
+#help {
+  top: 117px;
+}
 
-    #sidebarCollapse.side {
-        left: 310px !important;
-    }/*
-    #sidebarCollapse span {
-        display: none;
-    }*/
+#home {
+  top: 15px;
+}
+
+#openTags {
+  top: 66px;
+}
 
 
-    .tooltip-inner {
-    color: black;
-    background-color: white;
-  }
+.menu-button {
+    position: fixed;
+    z-index: 101;
+    left: 15px;
+    background-color: #4B577D;
+    border: none;
+    -webkit-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+    width: 44px;
+}
 
-  .arrow {
-    color: #565656;
-    /*background-color: #565656;*/
-  }
+#finishTour {
+  top: 15px;
+  background-color:#d5d7df; 
+  color: black;
+}
 
+.btn-tour {
+  width: 135px;
+  position: fixed;
+  z-index: 101;
+  right: 15px;
+  border: none;
+  display: none;
+}
+
+.btn-info {
+  -webkit-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+#continueTour {
+  top: 66px;
+  background-color: #4B577D;
+}
+
+
+.menu-button.side {
+  left: 310px !important;
+}
+
+.tooltip-inner {
+  color: black;
+  background-color: white;
+}
+
+.arrow {
+  color: #565656;
+}
 
 .pulse {
   background: rgba(255,255,255,.5);

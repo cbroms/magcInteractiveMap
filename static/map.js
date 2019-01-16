@@ -5,57 +5,36 @@ var locationsTextJSON;
 var locationsJSON;
 
 
-$(window).resize(function() {
-    $(".details-frame").height(
-        Math.ceil($(window).height() * 0.9)
-        );
-    // set to 98% height for mobile
-    if ($(window).width() <= 480) {
-        $(".details-frame").height(
-            Math.ceil($(window).height() * 0.96)
-            );
-    }
-});
-
 
 $(document).ready(function() {
 
-    // debug 
-
-    // $('div').click(function(){
-    //     var theClassName = this.className;
-    //     alert(theClassName)
-    // })
+    // trying to fix safari's refusal to abide by user-scalable=no
+    // document.addEventListener('touchmove', function (e){
+    //     if (e.scale !== 1) {
+    //         console.log('prevented default')
+    //         e.preventDefault()
+    //     }
+    // }, {passive: false} );
 
     console.log("app running!")
 
-    $(".details-frame").height(
-        Math.ceil($(window).height() * 0.9)
-        );
-    // set to 98% height for mobile
-    if ($(window).width() <= 480) {
-        $(".details-frame").height(
-            Math.ceil($(window).height() * 0.96)
-            );
-    }
-
-    $('#sidebarCollapse').click(function () {
+    $('#openTags').click(function () {
         $('#sidebar').toggleClass('closed');
-        $('#sidebarCollapse').toggleClass('side');
+        $('.menu-button').toggleClass('side');
     });
 
-    $('#using-the-map').click(function(){
-        $('#sidebar').toggleClass('closed');
-        $('#sidebarCollapse').toggleClass('side');
+    $('#help').click(function(){
         $('#demo').modal('show')
+        $('.menu-button').removeClass('side')
+        $('#sidebar').removeClass('closed')
     })
 
     // set the colors of each point
     for (key in colors) {
         if (colors[key].length == 1) {
-            $('#' + key).css("background-color", colors[key][0]);
+            $('.' + key).css("background-color", colors[key][0]);
         } else {
-            $('#' + key).css({background: "linear-gradient(151deg, " + colors[key][0] +  " 30%, " + colors[key][1] + " 70%)"});
+            $('.' + key).css({background: "linear-gradient(90deg, " + colors[key][0] +  " 30%, " + colors[key][1] + " 70%)"});
         }
     }
 
@@ -74,10 +53,10 @@ $(document).ready(function() {
     panArea = panzoom(document.querySelector('.zoomable'), {
         maxZoom: 0.99,
         minZoom: 0.2,
-        zoomSpeed: 0.05,
+        zoomSpeed: 0.02,
         onTouch: function(e) {
-            console.log('touched')
-            return false; // tells the library to not preventDefault.
+
+            //return false; // tells the library to not preventDefault.
         }
     });
 
@@ -100,13 +79,28 @@ $(document).ready(function() {
         // copy the transformation over to the points
         let matrix = $('.zoomable').first().css('transform')
 
+        // this is pretty tricky. #pointElements is a div layered over the 
+        // zoomable portion (.zoomable), which contains the map. Then, there's 
+        // another div, #clickElements, which is below the map. The points are 
+        // drawn in the #pointElements div so the user can see them. However, 
+        // pointer events are disabled on the #pointElements layer, so it does not mess 
+        // up the viewport scaling on mobile iOS. So, when a user clicks, it propogates 
+        // down to the #clickElements, which registers the click. 
         $('#clickElements').css('transform', matrix)
+        $('#pointElements').css('transform', matrix)
     });
 
 
     // when a button is clicked, close the tooltips 
     $('.btn').click(function(){
         $('.click-center').tooltip('hide')
+    })
+
+    // whenever the sidebar is open and the map is 
+    // touched, close the sidebar 
+    $('#clickElements').click(function(){
+        $('#sidebar').removeClass('closed')
+        $('.menu-button').removeClass('side')
     })
 
 
@@ -148,6 +142,7 @@ $(document).ready(function() {
         // touch finished
         touchStarted = false;
         console.log('touch finished')
+        //$('#clickEvents').css('pointer-events', 'auto');
         //panArea.pause()
 
     });
@@ -160,6 +155,7 @@ $(document).ready(function() {
         if (touchStarted) {
          // swiping
          console.log('touch in-progress')
+         //$('#clickEvents').css('pointer-events', 'none');
 
         }
     });
@@ -167,8 +163,27 @@ $(document).ready(function() {
     // get url and make new url object 
     let currUrl = new URL(window.location.href)
 
+    // when the demo container closes, reset its content 
+    $('#demo').on('hidden.bs.modal', function(){
+        resetDemo();
+    })
+
     // if we are showing a guide, set the step variable accordingly 
     if (guide){
+        // show the finish ad continue button 
+        $('#finishTour').fadeIn(600)
+        $('#continueTour').fadeIn(600)
+
+        // on click, show the guide modal to progress 
+        $('#continueTour').click(function(){
+            $('#guide').modal('show')
+        })
+
+        // when the button is clicked, fade in all the points and end tour
+        $('#finishTour').click(function(){
+            doneWithTour()
+        })
+
         locationsJSON = JSON.parse(locations)
         locationsTextJSON = JSON.parse(locationsText)
         let step = parseInt(currUrl.searchParams.get("step"))
@@ -179,6 +194,9 @@ $(document).ready(function() {
             $('#guide-content').html(locationsTextJSON[stepNumber].fields.text)
             if (demo) {
                 $('#before-filter').attr('onclick', 'showGuide();');
+                $('#demo').on('hidden.bs.modal', function(){
+                    showGuide();
+                })
             } else {
                 showGuide()
             }
@@ -191,28 +209,31 @@ $(document).ready(function() {
 
             if (demo) {
                 $('#before-filter').attr('onclick', 'showGuide();');
+                $('#demo').on('hidden.bs.modal', function(){
+                    showGuide();
+                })
             } else {
                 showGuide()
-            }
-            
+            }   
         }
-
     }
-    
-
 });
 
 // reveal the map and points after loading is complete
 Pace.on("done", () => {
     $("#map").removeClass("hidden");
     $("#clickElements").removeClass("hidden");
+    $("#pointElements").removeClass("hidden");
+
+    // fade in the buttons
+    $('.btn-info').removeClass("hidden")
 
     console.log("app revealed")
 
-    // open a modal by default if requested in url (for touch)
-    if (!frames && open != "") {
-        window.location.href = 'details/' + open + '?sender=map&redirected=true';
-    }
+    // // open a modal by default if requested in url (for touch)
+    // if (!frames && open != "") {
+    //     window.location.href = 'details/' + open + '?sender=map&redirected=true';
+    // }
     // open a modal by default if requested in url (for desktop)
     if ($('.popup-' + open ).length > 0) {
         $('.popup-' + open ).modal('show');
@@ -248,6 +269,14 @@ function nextDemo(e) {
         $('#demo-' + (parseInt(num) + 1).toString()).fadeIn(600).css("display","block");
     })
     
+}
+
+// reset the demo when it is complete 
+function resetDemo() {
+    $('.demo-content').fadeOut()
+    $('#demo-1').fadeIn()
+    $('#demo-2').children().last().attr('onclick', 'nextDemo(this);')
+    $('#demo').off()
 }
 
 //http://stackoverflow.com/a/10997390/11236
@@ -309,6 +338,9 @@ function goToRevisedPage() {
     } else {
         $('#demo').modal('hide')
     }
+    // close the sidebar no matter what 
+    $('#sidebar').removeClass('closed')
+    $('.menu-button').removeClass('side')
 
 }
 
@@ -320,8 +352,7 @@ $('.pulse').click(function (e) {
     if (guide) {
         last = '?guide=true'
     }
-    if (!$('.popup-' + slug).children().first().children().first().children().last().is('iframe')
-        && frames){
+    if (!$('.popup-' + slug).children().first().children().first().children().last().is('iframe')){
          $('.popup-' + slug).children().first().children().first().append('<iframe src="details/' + slug + last +'" class="rounded details-frame"></iframe>')
     }
   
@@ -342,12 +373,12 @@ function incrementStep() {
     let target = locationsJSON[stepNumber].fields.slug
 
     $('.pulse').each(function(){
-        if ($(this).children().first().attr('id') != target) {
-            $(this).css('display', 'none')
+        if (!$(this).children().first().hasClass(target)) {
+            $(this).fadeOut(600)
             $(this).children().first().tooltip('hide')
             $(this).css('animation', 'none')
         } else {
-            $(this).css('display', 'block')
+            $(this).fadeIn(600)
             $(this).css('animation', 'pulse 2s infinite')
             //$($(this).children().first()[0]).tooltip('show')
         }
@@ -357,18 +388,21 @@ function incrementStep() {
     $('#guide').modal('hide')
 
     if (stepNumber + 2 >= locationsJSON.length) {
+        // we are almost done with the tour
         // remove the skip button
-        $('#skip').css('display', 'none')
-    }
+        $('#skip').html('Finish')
+    } 
 
     if (stepNumber + 1 >= locationsJSON.length) {
         // we are done with the tour 
+        $('#continueTour').fadeOut(600)
         guide = false
         window.history.replaceState('', '', updateURLParameter(window.location.href, 'step', ''));
         window.history.replaceState('', '', updateURLParameter(window.location.href, 'question-guide', 'false'));
         // add an event listener for the close of the target modal 
         $('.popup-' + target).on('hidden.bs.modal', function (e) {
-            $('.pulse').css('display', 'block')
+            $('#finishTour').fadeOut(600)
+            $('.pulse').fadeIn(600)
             $('.pulse').css('animation', 'none')
         })
 
@@ -381,6 +415,8 @@ function incrementStep() {
         // add an event listener for the close of the target modal 
         $('.popup-' + target).on('hidden.bs.modal', function (e) {
             $('#guide').modal('show')
+            // remove event listener when done 
+            $('.popup-' + target).off()
         })
     }
 
@@ -396,20 +432,44 @@ function incrementStep() {
 function skipNextStep() {
 
     if (stepNumber + 2 >= locationsJSON.length) {
-        // we are done with the tour 
-        // remove the skip button
-        $('#skip').css('display', 'none')
-        // we are done with the tour 
-        // window.history.replaceState('', '', updateURLParameter(window.location.href, 'step', ''));
-        // window.history.replaceState('', '', updateURLParameter(window.location.href, 'question-guide', 'false'));
+        // we are almost done with the tour 
+        $('#skip').html('Finish')
+        $('#skip').attr('onclick', 'doneWithTour();')
     }
-    stepNumber += 1
-    $('#guide-content').html(locationsTextJSON[stepNumber].fields.text)
-    // change the url param to new stepNumber 
-    window.history.replaceState('', '', updateURLParameter(window.location.href, 'step', stepNumber.toString()));
+    
+    if (stepNumber + 1 >= locationsJSON.length) {
+        // we are done with the tour 
+        $('#continueTour').fadeOut(600)
+        guide = false
+        window.history.replaceState('', '', updateURLParameter(window.location.href, 'step', ''));
+        window.history.replaceState('', '', updateURLParameter(window.location.href, 'question-guide', 'false'));
+        // add an event listener for the close of the target modal 
+        $('.popup-' + target).on('hidden.bs.modal', function (e) {
+            $('#finishTour').fadeOut(600)
+            $('.pulse').fadeIn(600)
+            $('.pulse').css('animation', 'none')
+        })
+
+    } else {
+        stepNumber += 1
+        $('#guide-content').html(locationsTextJSON[stepNumber].fields.text)
+        // change the url param to new stepNumber 
+        window.history.replaceState('', '', updateURLParameter(window.location.href, 'step', stepNumber.toString()));
+    }
 
 }
 
+function doneWithTour() {
+    $('#guide').modal('hide')
+    $('#continueTour').fadeOut(600)
+    $('#finishTour').fadeOut(600)
+    $('.pulse').fadeIn(600)
+    $('.pulse').css('animation', 'none')
+    guide = false
+    // set relevant url params to false 
+    window.history.replaceState('', '', updateURLParameter(window.location.href, 'step', ''));
+    window.history.replaceState('', '', updateURLParameter(window.location.href, 'question-guide', 'false'));
+}
 
 
 

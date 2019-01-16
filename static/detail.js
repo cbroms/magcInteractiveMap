@@ -64,6 +64,9 @@ window.onload = function() {
      if (window.innerWidth < 520) {
       $('.slick-slide').css("max-width", (window.innerWidth - 10).toString() + "px");
     }
+
+    // add the controls to the slider div 
+    $('.slider').append($('#controls'))
 };
 
 function displayShare() {

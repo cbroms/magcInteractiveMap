@@ -164,7 +164,7 @@ function closeDetails() {
         <button class="btn shadow demo-button" style="background-color:#4B577D; color: white;padding: 15px;" onclick="goToRevisedPage()">Apply &rarr;</button>
         </div>
 
-        <div class="container rounded tags-container">
+      <!--   <div class="container rounded tags-container">
             <h5>Help</h5>
             <hr>    
             <button type="button" class="btn btn-block" 
@@ -181,11 +181,11 @@ function closeDetails() {
                     style="background-color:#4B577D33;"
                     > MAGC Home →
                 </button>
-        </div>
+        </div> -->
 
         <div class="container rounded tags-container">
-            <h5>More</h5>
-            <hr>    
+            <!-- <h5>More</h5>
+            <hr>  -->   
             <button type="button" class="btn btn-block" 
                     data-toggle="modal" 
                     {% if frames %}
@@ -201,8 +201,24 @@ function closeDetails() {
         <br>
         </div>
     </nav>
-    <button type="button" id="sidebarCollapse" class="btn btn-info">
-        <i class="fas fa-bars"></i>
+    <button type="button" id="openTags" class="btn btn-info menu-button hidden">
+        <i class="fas fa-tags"></i>
+    </button>
+
+    <a class="btn btn-info menu-button hidden" id="home" href="../" role="button">
+        <i class="fas fa-home"></i>
+    </a>
+
+    <button type="button" id="help" class="btn btn-info menu-button hidden">
+        <i class="fas fa-question"></i>
+    </button>
+
+    <button type="button" id="finishTour" class="btn btn-info btn-tour hidden">
+        Finish Tour
+    </button>
+
+    <button type="button" id="continueTour" class="btn btn-info btn-tour hidden">
+        Continue Tour
     </button>
 
     <!-- Map Content -->
@@ -216,35 +232,48 @@ function closeDetails() {
                     <img src="{{ map.image.url }}" id="map" class="hidden" height="{{ map.image.height }}px" width=" {{ map.image.width }}px" >
                 </div>
             </div>
-            <!-- Clickable buttons drawn over map-->
-            <div id="clickElements" class="hidden"  style='height: {{ map.image.height }}px; width: {{ map.image.width }}px;'>
+
+
+            <!-- Fake buttons drawn over map, to denote the locations -->
+            <div id="pointElements" class="hidden"  style='height: {{ map.image.height }}px; width: {{ map.image.width }}px;'>
                 <div class="rotated">
                 {% for point in points %}
-                    <button type="button" class="btn click pulse" data-toggle="modal" 
-                            {% if frames %}
-                                data-target=".popup-{{ point.slug }}"
-                            {% else %}
-                                onclick="location.href='details/{{ point.slug }}?sender=map';"
-                            {% endif %}
+                    <button type="button" class="btn click pulse"
                             style="bottom:{{ point.y|add:"-50" }}px; left:{{ point.x|add:"-50" }}px;"
                             >
-                            <div class="click-center"
+                            <div class="click-center {{ point.slug }}"
                                  style="bottom:25px; left:25px;"
-                                 id="{{ point.slug }}"
-                                 {% if frames %}
-                                    data-toggle="tooltip" data-placement="bottom" data-container="body" title="{{ point.short_name }}">
-                                 {% endif %}
+                                 
                             </div>
                     </button>
 
                 {% endfor %}
                 </div>
             </div>
+
+            <!-- Real buttons drawn below the map,  -->
+            <div id="clickElements" class="hidden"  style='height: {{ map.image.height }}px; width: {{ map.image.width }}px;'>
+                <div class="rotated">
+                {% for point in points %}
+                    <button type="button" class="btn click pulse" data-toggle="modal" 
+                            data-target=".popup-{{ point.slug }}"
+                            style="bottom:{{ point.y|add:"-50" }}px; left:{{ point.x|add:"-50" }}px;"
+                            >
+                            <div class="click-center {{ point.slug }}"
+                                 style="bottom:25px; left:25px;"
+                                 id="{{ point.slug }}"
+                                    data-toggle="tooltip" data-placement="bottom" data-container="body" title="{{ point.short_name }}">
+                            </div>
+                    </button>
+
+                {% endfor %}
+                </div>
+            </div>
+
         </div>
    <!--  </div> -->
     </div>
-    <!-- Popup windows for each point on the map (only if not mobile/tablet to speed up page) -->
-    {% if frames %}
+    <!-- Popup windows for each point on the map -->
     {% for point in points %}
         <div class="modal fade popup-{{ point.slug }} popup" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-lg preloaded-modal rounded" role="document">
@@ -256,7 +285,6 @@ function closeDetails() {
             </div>
         </div>
     {% endfor %}
-    {% endif %}
 
     {% if guide %}
     <!-- Popup window for the guide  -->
@@ -305,6 +333,7 @@ function closeDetails() {
 
 {% block scripts%}
 <script src="https://unpkg.com/panzoom@7.0.2/dist/panzoom.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
 <script type="text/javascript">
     // variables passed from view encoded for javascript
     let height = {{ map.image.height | js}};
