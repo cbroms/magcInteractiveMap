@@ -18,6 +18,14 @@ $(document).ready(function() {
 
     console.log("app running!")
 
+    $(document).on('touchstart', function(event){
+        console.log(event.target)
+    })
+
+    // $('#map').on('touchstart', function(e){
+    //     e.preventDefault();
+    // })
+
     $('#openTags').click(function () {
         $('#sidebar').toggleClass('closed');
         $('.menu-button').toggleClass('side');
@@ -55,8 +63,7 @@ $(document).ready(function() {
         minZoom: 0.2,
         zoomSpeed: 0.02,
         onTouch: function(e) {
-
-            //return false; // tells the library to not preventDefault.
+            return false; // tells the library to not preventDefault.
         }
     });
 
@@ -86,7 +93,7 @@ $(document).ready(function() {
         // pointer events are disabled on the #pointElements layer, so it does not mess 
         // up the viewport scaling on mobile iOS. So, when a user clicks, it propogates 
         // down to the #clickElements, which registers the click. 
-        $('#clickElements').css('transform', matrix)
+        //$('#clickElements').css('transform', matrix)
         $('#pointElements').css('transform', matrix)
     });
 

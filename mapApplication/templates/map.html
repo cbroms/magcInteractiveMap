@@ -227,31 +227,11 @@ function closeDetails() {
     <!-- <div class='zoomable' > -->
      
             <!-- Map -->
-            <div class="zoomable">
+            <div class="zoomable" style='height: {{ map.image.height }}px; width: {{ map.image.width }}px;'>
                 <div class="rotated">
-                    <img src="{{ map.image.url }}" id="map" class="hidden" height="{{ map.image.height }}px" width=" {{ map.image.width }}px" >
-                </div>
-            </div>
+                   <!--  <img src="{{ map.image.url }}" id="map" class="hidden" height="{{ map.image.height }}px" width=" {{ map.image.width }}px" > -->
 
-
-            <!-- Fake buttons drawn over map, to denote the locations -->
-            <div id="pointElements" class="hidden"  style='height: {{ map.image.height }}px; width: {{ map.image.width }}px;'>
-                <div class="rotated">
-                {% for point in points %}
-                    <button type="button" class="btn click pulse"
-                            style="bottom:{{ point.y|add:"-50" }}px; left:{{ point.x|add:"-50" }}px;"
-                            >
-                            <div class="click-center {{ point.slug }}"
-                                 style="bottom:25px; left:25px;"
-                                 
-                            </div>
-                    </button>
-
-                {% endfor %}
-                </div>
-            </div>
-
-            <!-- Real buttons drawn below the map,  -->
+                    <!-- Real buttons drawn below the map,  -->
             <div id="clickElements" class="hidden"  style='height: {{ map.image.height }}px; width: {{ map.image.width }}px;'>
                 <div class="rotated">
                 {% for point in points %}
@@ -269,6 +249,30 @@ function closeDetails() {
                 {% endfor %}
                 </div>
             </div>
+
+
+                </div>
+            </div>
+
+
+            <!-- Fake buttons drawn over map, to denote the locations -->
+   <!--          <div id="pointElements" class="hidden"  style='height: {{ map.image.height }}px; width: {{ map.image.width }}px;'>
+                <div class="rotated">
+                {% for point in points %}
+                    <button type="button" class="btn click pulse"
+                            style="bottom:{{ point.y|add:"-50" }}px; left:{{ point.x|add:"-50" }}px;"
+                            >
+                            <div class="click-center {{ point.slug }}"
+                                 style="bottom:25px; left:25px;"
+                                 
+                            </div>
+                    </button>
+
+                {% endfor %}
+                </div>
+            </div> -->
+
+            
 
         </div>
    <!--  </div> -->
