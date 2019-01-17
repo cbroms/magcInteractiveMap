@@ -18,7 +18,27 @@ $(document).ready(function() {
 
     console.log("app running!")
 
+    var mc = new Hammer(document.querySelector('.zoomable'));
+    // mc.add( new Hammer.Tap({ event: 'doubletap', taps: 2 }) );
+
+    mc.on('tap', function(e){
+        $('.zoomable').css('pointer-events', 'none')
+        console.log('removed touch')
+    });
+
+    $('.pulse').on('click', function(){
+        let slug = $(this).children().first().attr('id')
+        // when the modal is closed, restore the pointer events to the map
+        $('.popup-' + slug).on('hidden.bs.modal', function(){
+           $('.zoomable').css('pointer-events', 'auto') 
+           console.log('restored touch')
+        })
+
+    })
+
     $(document).on('touchstart', function(event){
+
+        //$('#clickElements').css('display', 'none')
         console.log(event.target)
     })
 
@@ -62,6 +82,7 @@ $(document).ready(function() {
         maxZoom: 0.99,
         minZoom: 0.2,
         zoomSpeed: 0.02,
+        zoomDoubleClickSpeed: 1, 
         onTouch: function(e) {
             return false; // tells the library to not preventDefault.
         }
@@ -93,8 +114,8 @@ $(document).ready(function() {
         // pointer events are disabled on the #pointElements layer, so it does not mess 
         // up the viewport scaling on mobile iOS. So, when a user clicks, it propogates 
         // down to the #clickElements, which registers the click. 
-        //$('#clickElements').css('transform', matrix)
-        $('#pointElements').css('transform', matrix)
+        $('#clickElements').css('transform', matrix)
+        //$('#pointElements').css('transform', matrix)
     });
 
 
@@ -137,7 +158,7 @@ $(document).ready(function() {
         cachedY = currY = pointer.pageY;
         // a touch event is detected      
         touchStarted = true;
-        console.log('touch started')
+        //console.log('touch started')
         //panArea.resume()
 
 
@@ -148,7 +169,7 @@ $(document).ready(function() {
         e.preventDefault();
         // touch finished
         touchStarted = false;
-        console.log('touch finished')
+       // console.log('touch finished')
         //$('#clickEvents').css('pointer-events', 'auto');
         //panArea.pause()
 
@@ -161,7 +182,7 @@ $(document).ready(function() {
         currY = pointer.pageY;
         if (touchStarted) {
          // swiping
-         console.log('touch in-progress')
+         //console.log('touch in-progress')
          //$('#clickEvents').css('pointer-events', 'none');
 
         }
