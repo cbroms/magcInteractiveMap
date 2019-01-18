@@ -4,6 +4,22 @@ var stepNumber = 0;
 var locationsTextJSON;
 var locationsJSON;
 
+// assume the user has touch device 
+var touch = true
+var userTouched = false
+
+// The touch interaction is pretty tricky, thanks to iOS. #pointElements 
+// is a div layered over the zoomable portion (.zoomable), which contains 
+// the map. Then, there's another div, #clickElements, which is below the 
+// map. The points are drawn in the #pointElements div so the user can see 
+// them. However, pointer events are disabled on the #pointElements layer,
+// so it does not mess up the viewport scaling on mobile iOS (the user must 
+// be touching an element in the .zoomable div, nothing above or below.)
+
+// When a user clicks once, it "primes" the map for another touch by 
+// disabling touch events on the zoomable portion, so the user can click
+// on a point below the map. The map is made interactive again after the modal 
+// for the clicked point closes.
 
 
 $(document).ready(function() {
@@ -22,29 +38,42 @@ $(document).ready(function() {
     // mc.add( new Hammer.Tap({ event: 'doubletap', taps: 2 }) );
 
     mc.on('tap', function(e){
-        $('.zoomable').css('pointer-events', 'none')
-        console.log('removed touch')
+
+        if (touch) {
+
+            $('.zoomable').css('pointer-events', 'none')
+            console.log('removed touch')
+
+            // if no modal is open in time, add back pointer events 
+            setTimeout(function(){
+                if(!$('.popup').is(':visible')) {
+                    $('.zoomable').css('pointer-events', 'auto')
+                    console.log('restored touch')
+                }
+            }, 1500)
+        }
     });
 
     $('.pulse').on('click', function(){
-        let slug = $(this).children().first().attr('id')
-        // when the modal is closed, restore the pointer events to the map
-        $('.popup-' + slug).on('hidden.bs.modal', function(){
-           $('.zoomable').css('pointer-events', 'auto') 
-           console.log('restored touch')
-        })
+        
+        if (touch) {
+            let slug = $(this).children().first().attr('id')
+            // when the modal is closed, restore the pointer events to the map
+            $('.popup-' + slug).on('hidden.bs.modal', function(){
+                $('.zoomable').css('pointer-events', 'auto') 
+                console.log('restored touch')
+            })
+        }
+        
 
     })
 
+
+    // if the user touches, then they are using touchscreen
     $(document).on('touchstart', function(event){
-
-        //$('#clickElements').css('display', 'none')
-        console.log(event.target)
+        userTouched = true
+        touch = true
     })
-
-    // $('#map').on('touchstart', function(e){
-    //     e.preventDefault();
-    // })
 
     $('#openTags').click(function () {
         $('#sidebar').toggleClass('closed');
@@ -106,16 +135,7 @@ $(document).ready(function() {
 
         // copy the transformation over to the points
         let matrix = $('.zoomable').first().css('transform')
-
-        // this is pretty tricky. #pointElements is a div layered over the 
-        // zoomable portion (.zoomable), which contains the map. Then, there's 
-        // another div, #clickElements, which is below the map. The points are 
-        // drawn in the #pointElements div so the user can see them. However, 
-        // pointer events are disabled on the #pointElements layer, so it does not mess 
-        // up the viewport scaling on mobile iOS. So, when a user clicks, it propogates 
-        // down to the #clickElements, which registers the click. 
         $('#clickElements').css('transform', matrix)
-        //$('#pointElements').css('transform', matrix)
     });
 
 
@@ -148,45 +168,45 @@ $(document).ready(function() {
     };
 
 
-    // detect swipes vs clicks on mobile
-    $touchArea.on('touchstart mousedown', function (e){
+    // // detect swipes vs clicks on mobile
+    // $touchArea.on('touchstart mousedown', function (e){
    
-        let pointer = getPointerEvent(e);
-        // caching the current x
-        cachedX = currX = pointer.pageX;
-        // caching the current y
-        cachedY = currY = pointer.pageY;
-        // a touch event is detected      
-        touchStarted = true;
-        //console.log('touch started')
-        //panArea.resume()
+    //     let pointer = getPointerEvent(e);
+    //     // caching the current x
+    //     cachedX = currX = pointer.pageX;
+    //     // caching the current y
+    //     cachedY = currY = pointer.pageY;
+    //     // a touch event is detected      
+    //     touchStarted = true;
+    //     //console.log('touch started')
+    //     //panArea.resume()
 
 
 
-    });
+    // });
 
-    $touchArea.on('touchend mouseup touchcancel', function (e){
-        e.preventDefault();
-        // touch finished
-        touchStarted = false;
-       // console.log('touch finished')
-        //$('#clickEvents').css('pointer-events', 'auto');
-        //panArea.pause()
+    // $touchArea.on('touchend mouseup touchcancel', function (e){
+    //     e.preventDefault();
+    //     // touch finished
+    //     touchStarted = false;
+    //    // console.log('touch finished')
+    //     //$('#clickEvents').css('pointer-events', 'auto');
+    //     //panArea.pause()
 
-    });
+    // });
 
-    $touchArea.on('touchmove mousemove', function (e){
-        e.preventDefault();
-        let pointer = getPointerEvent(e);
-        currX = pointer.pageX;
-        currY = pointer.pageY;
-        if (touchStarted) {
-         // swiping
-         //console.log('touch in-progress')
-         //$('#clickEvents').css('pointer-events', 'none');
+    // $touchArea.on('touchmove mousemove', function (e){
+    //     e.preventDefault();
+    //     let pointer = getPointerEvent(e);
+    //     currX = pointer.pageX;
+    //     currY = pointer.pageY;
+    //     if (touchStarted) {
+    //      // swiping
+    //      //console.log('touch in-progress')
+    //      //$('#clickEvents').css('pointer-events', 'none');
 
-        }
-    });
+    //     }
+    // });
 
     // get url and make new url object 
     let currUrl = new URL(window.location.href)
@@ -264,6 +284,7 @@ Pace.on("done", () => {
     // }
     // open a modal by default if requested in url (for desktop)
     if ($('.popup-' + open ).length > 0) {
+        $('.popup-' + open).children().first().children().first().append('<iframe src="details/' + open  +'" class="rounded details-frame"></iframe>')
         $('.popup-' + open ).modal('show');
     }
 
@@ -276,6 +297,15 @@ Pace.on("done", () => {
             window.history.replaceState('', '', updateURLParameter(window.location.href, 'demo', 'false'));
         })
     }
+
+    // if there are no touches 3 seconds after loading,
+    // assume the user is not using touch 
+    setTimeout(function(){
+        if (!userTouched) {
+            touch = false
+            $('.zoomable').css('pointer-events', 'none')
+        }
+    }, 3000)
 
     // disable Pace
     Pace.options = {
