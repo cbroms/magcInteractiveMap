@@ -286,6 +286,13 @@ function closeDetails() {
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <i class="fas fa-times"></i>
                     </button>
+
+                    <!-- The iframe is inserted here, wrapped for iOS compatibility -->
+                    <div id="exterior-iframe-container">
+                        <div id="interior-iframe-container" class="scroll no-scrollbar int-{{ point.slug }}">
+                            
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

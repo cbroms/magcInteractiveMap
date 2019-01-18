@@ -55,7 +55,7 @@ $(document).ready(function() {
     });
 
     $('.pulse').on('click', function(){
-        
+
         if (touch) {
             let slug = $(this).children().first().attr('id')
             // when the modal is closed, restore the pointer events to the map
@@ -168,45 +168,45 @@ $(document).ready(function() {
     };
 
 
-    // // detect swipes vs clicks on mobile
-    // $touchArea.on('touchstart mousedown', function (e){
+    // detect swipes vs clicks on mobile
+    $touchArea.on('touchstart mousedown', function (e){
    
-    //     let pointer = getPointerEvent(e);
-    //     // caching the current x
-    //     cachedX = currX = pointer.pageX;
-    //     // caching the current y
-    //     cachedY = currY = pointer.pageY;
-    //     // a touch event is detected      
-    //     touchStarted = true;
-    //     //console.log('touch started')
-    //     //panArea.resume()
+        let pointer = getPointerEvent(e);
+        // caching the current x
+        cachedX = currX = pointer.pageX;
+        // caching the current y
+        cachedY = currY = pointer.pageY;
+        // a touch event is detected      
+        touchStarted = true;
+        //console.log('touch started')
+        //panArea.resume()
 
 
 
-    // });
+    });
 
-    // $touchArea.on('touchend mouseup touchcancel', function (e){
-    //     e.preventDefault();
-    //     // touch finished
-    //     touchStarted = false;
-    //    // console.log('touch finished')
-    //     //$('#clickEvents').css('pointer-events', 'auto');
-    //     //panArea.pause()
+    $touchArea.on('touchend mouseup touchcancel', function (e){
+        e.preventDefault();
+        // touch finished
+        touchStarted = false;
+       // console.log('touch finished')
+        //$('#clickEvents').css('pointer-events', 'auto');
+        //panArea.pause()
 
-    // });
+    });
 
-    // $touchArea.on('touchmove mousemove', function (e){
-    //     e.preventDefault();
-    //     let pointer = getPointerEvent(e);
-    //     currX = pointer.pageX;
-    //     currY = pointer.pageY;
-    //     if (touchStarted) {
-    //      // swiping
-    //      //console.log('touch in-progress')
-    //      //$('#clickEvents').css('pointer-events', 'none');
+    $touchArea.on('touchmove mousemove', function (e){
+        e.preventDefault();
+        let pointer = getPointerEvent(e);
+        currX = pointer.pageX;
+        currY = pointer.pageY;
+        if (touchStarted) {
+         // swiping
+         //console.log('touch in-progress')
+         //$('#clickEvents').css('pointer-events', 'none');
 
-    //     }
-    // });
+        }
+    });
 
     // get url and make new url object 
     let currUrl = new URL(window.location.href)
@@ -284,7 +284,7 @@ Pace.on("done", () => {
     // }
     // open a modal by default if requested in url (for desktop)
     if ($('.popup-' + open ).length > 0) {
-        $('.popup-' + open).children().first().children().first().append('<iframe src="details/' + open  +'" class="rounded details-frame"></iframe>')
+        $('.int-' + open).append('<iframe src="details/' + open  +'" class="rounded details-frame"></iframe>')
         $('.popup-' + open ).modal('show');
     }
 
@@ -406,12 +406,18 @@ function goToRevisedPage() {
 // add iframe on point click if we are showing frames
 $('.pulse').click(function (e) {
     let slug = $(this).children().first().attr('id')
-    let last = ''
+    let last = '?'
     if (guide) {
-        last = '?guide=true'
+        last = last + '&guide=true'
     }
-    if (!$('.popup-' + slug).children().first().children().first().children().last().is('iframe')){
-         $('.popup-' + slug).children().first().children().first().append('<iframe src="details/' + slug + last +'" class="rounded details-frame"></iframe>')
+    if (window.innerWidth <= 500) {
+        last = last + '&ios-sml=true'
+    }
+    if (window.innerWidth == 768) {
+        last = last + '&ios-md=true'
+    }
+    if (!$('.int-' + slug).children().first().is('iframe')){
+         $('.int-' + slug).append('<iframe src="details/' + slug + last +'" class="rounded details-frame" ></iframe>')
     }
   
 })

@@ -16,19 +16,44 @@ $(window).resize(function() {
     }
 });
 
-window.onload = function() {
+$(document).ready( function() {
 
-    $(".faded-background").width(
+    let currUrl = new URL(window.location.href)
+    let iosS = currUrl.searchParams.get("ios-sml")
+    let iosM = currUrl.searchParams.get("ios-md")
+
+    // if (iosS == 'true') {
+    //   $('body').css('width', '1px')
+    //   alert('It ran!')
+    //   $('.container').css('width', '1px')
+    //   $('.back-fill').css('width', '1px');
+    //   $('.faded-background').css('width', '1px');
+    // } else if (iosM == 'true') {
+    //   $('body').css('width', '498px')
+    //   $('.container').css('width', '498px')
+    //   $('.back-fill').css('width', '498px');
+    //   $('.faded-background').css('width', '498px');
+
+    // }
+
+      $('.main-image').width(
+        $('.native').width()
+      )
+      
+      $(".faded-background").width(
         Math.ceil($(".main-image").width())
       );
 
-    $(".shrink").width(
+      $(".shrink").width(
         Math.ceil($(".native").width())
       );
     
-    $(".back-fill").width(
+      $(".back-fill").width(
         Math.ceil($(".native").width())
       );
+    
+
+    
 
     // initialize the carousel element 
     $('.slider').slick({
@@ -67,7 +92,7 @@ window.onload = function() {
 
     // add the controls to the slider div 
     $('.slider').append($('#controls'))
-};
+});
 
 function displayShare() {
   if ($('#share-details').css("visibility") != "visible") {

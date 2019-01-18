@@ -13,6 +13,10 @@
     html, body {
         background-color: #e8ebef;
     }
+
+    body {
+        width: 1px !important; min-width: 99%
+    }
 </style>
 
 
@@ -26,7 +30,7 @@
 
 <div class="container-fluid hidden" style="background-color:#e8ebef;">
     <div class="container native" style="">
-        <img src="{{ point.main_image.url }}" class="img-fluid center-block main-image rounded" style="width:100%;position:sticky; top:0px; z-index:-1000;">
+        <img src="{{ point.main_image.url }}" class="img-fluid center-block main-image rounded" style="width:100vh;position:sticky; top:0px; z-index:-1000;">
     </div>
     <div class="container rounded shrink shadow" style="margin-bottom: 20px;">
     
