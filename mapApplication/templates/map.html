@@ -188,12 +188,8 @@ function closeDetails() {
             <hr>  -->   
             <button type="button" class="btn btn-block" 
                     data-toggle="modal" 
-                    {% if frames %}
-                        data-target=".popup-about"
-                    {% else %}
-                        onclick="location.href='about-credits?sender=map';"
-                    {% endif %}
-
+                    data-target=".popup-about"
+                    id="about-button" 
                     style="background-color:#4B577D33;"
                     > About & Credits
                 </button>
@@ -256,14 +252,18 @@ function closeDetails() {
             <div id="clickElements" class="hidden"  style='height: {{ map.image.height }}px; width: {{ map.image.width }}px;'>
                 <div class="rotated">
                 {% for point in points %}
-                    <button type="button" class="btn click pulse" data-toggle="modal" 
+                    <button type="button" class="btn click pulse pulse-click" data-toggle="modal" 
                             data-target=".popup-{{ point.slug }}"
                             style="bottom:{{ point.y|add:"-50" }}px; left:{{ point.x|add:"-50" }}px;"
                             >
                             <div class="click-center {{ point.slug }}"
                                  style="bottom:25px; left:25px;"
                                  id="{{ point.slug }}"
-                                    data-toggle="tooltip" data-placement="bottom" data-container="body" title="{{ point.short_name }}">
+                                 {% if frames %}
+                                    data-toggle="tooltip" data-placement="bottom" data-container="body" title="{{ point.short_name }}"
+                                 {% endif %}
+                                    >
+
                             </div>
                     </button>
 

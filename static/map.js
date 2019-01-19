@@ -8,6 +8,13 @@ var locationsJSON;
 var touch = true
 var userTouched = false
 
+// The new touch interaction method -> 
+// when user taps the map, the x and y coords are recorded and compared 
+// against the locations of all the points on the map. An overlap
+// indicates the user clicked on that button, so the modal is opened. 
+// This bypasses the layering and touch propogation issues from before.
+
+// The old touch interaction method ->
 // The touch interaction is pretty tricky, thanks to iOS. #pointElements 
 // is a div layered over the zoomable portion (.zoomable), which contains 
 // the map. Then, there's another div, #clickElements, which is below the 
@@ -15,7 +22,6 @@ var userTouched = false
 // them. However, pointer events are disabled on the #pointElements layer,
 // so it does not mess up the viewport scaling on mobile iOS (the user must 
 // be touching an element in the .zoomable div, nothing above or below.)
-
 // When a user clicks once, it "primes" the map for another touch by 
 // disabling touch events on the zoomable portion, so the user can click
 // on a point below the map. The map is made interactive again after the modal 
@@ -24,13 +30,6 @@ var userTouched = false
 
 $(document).ready(function() {
 
-    // trying to fix safari's refusal to abide by user-scalable=no
-    // document.addEventListener('touchmove', function (e){
-    //     if (e.scale !== 1) {
-    //         console.log('prevented default')
-    //         e.preventDefault()
-    //     }
-    // }, {passive: false} );
 
     console.log("app running!")
 
@@ -39,34 +38,66 @@ $(document).ready(function() {
 
     mc.on('tap', function(e){
 
-        if (touch) {
+        // old touch method 
+        // if (touch) {
 
-            $('.zoomable').css('pointer-events', 'none')
-            console.log('removed touch')
+        //     $('.zoomable').css('pointer-events', 'none')
+        //     console.log('removed touch')
 
-            // if no modal is open in time, add back pointer events 
-            setTimeout(function(){
-                if(!$('.popup').is(':visible')) {
-                    $('.zoomable').css('pointer-events', 'auto')
-                    console.log('restored touch')
+        //     // if no modal is open in time, add back pointer events 
+        //     setTimeout(function(){
+        //         if(!$('.popup').is(':visible')) {
+        //             $('.zoomable').css('pointer-events', 'auto')
+        //             console.log('restored touch')
+        //         }
+        //     }, 1500)
+        // }
+
+        // when the map is clicked, close the tooltips 
+        $('.click-center').tooltip('hide')
+
+        let xClick = e.center.x
+        let yClick = e.center.y
+
+        // check the click pos against each of the click locations 
+        $('.pulse-click').each(function(){
+            let pos = $(this)[0].getBoundingClientRect();
+
+            if (xClick >= pos.x && xClick <= (pos.x + pos.width) &&
+                yClick >= pos.y && yClick <= (pos.y + pos.height)) {
+
+                console.log('clicked')
+
+                // if the point was clicked, add an iframe and show
+                let slug = $(this).children().first().attr('id')
+                let last = '?'
+                if (guide) {
+                    last = last + '&guide=true'
                 }
-            }, 1500)
-        }
+                if (!$('.int-' + slug).children().first().is('iframe')){
+                    $('.int-' + slug).append('<iframe src="details/' + slug + last +'" class="rounded details-frame" ></iframe>')
+                }
+                
+                $('.popup-' + slug).modal('show')
+            }
+
+        })
     });
 
-    $('.pulse').on('click', function(){
+    // old touch method
+    // $('.pulse').on('click', function(){
 
-        if (touch) {
-            let slug = $(this).children().first().attr('id')
-            // when the modal is closed, restore the pointer events to the map
-            $('.popup-' + slug).on('hidden.bs.modal', function(){
-                $('.zoomable').css('pointer-events', 'auto') 
-                console.log('restored touch')
-            })
-        }
+    //     if (touch) {
+    //         let slug = $(this).children().first().attr('id')
+    //         // when the modal is closed, restore the pointer events to the map
+    //         $('.popup-' + slug).on('hidden.bs.modal', function(){
+    //             $('.zoomable').css('pointer-events', 'auto') 
+    //             console.log('restored touch')
+    //         })
+    //     }
         
 
-    })
+    // })
 
 
     // if the user touches, then they are using touchscreen
@@ -99,13 +130,6 @@ $(document).ready(function() {
      $('[data-toggle="tooltip"]').tooltip()
 
 
-    // make links work in pan area
-  /*  $('.zoomable a').on('mousedown touchstart', function(e) {
-        console.log("touch");
-        e.stopImmediatePropagation();
-    });*/
-
-    
     // init panzoom 
     panArea = panzoom(document.querySelector('.zoomable'), {
         maxZoom: 0.99,
@@ -113,7 +137,7 @@ $(document).ready(function() {
         zoomSpeed: 0.02,
         zoomDoubleClickSpeed: 1, 
         onTouch: function(e) {
-            return false; // tells the library to not preventDefault.
+            //return false; // tells the library to not preventDefault.
         }
     });
 
@@ -139,21 +163,23 @@ $(document).ready(function() {
     });
 
 
-    // when a button is clicked, close the tooltips 
-    $('.btn').click(function(){
-        $('.click-center').tooltip('hide')
-    })
 
     // whenever the sidebar is open and the map is 
     // touched, close the sidebar 
-    $('#clickElements').click(function(){
+    $('#clickElements').on('touchstart', function(){
         $('#sidebar').removeClass('closed')
         $('.menu-button').removeClass('side')
     })
 
+    // when the about button is clicked, close the sidebar
+    $('#about-button').click(function(){
+        $('#sidebar').removeClass('closed')
+        $('.menu-button').removeClass('side')
+    })
 
     // set initial position
-    panArea.zoomAbs(300, 0, 0.3);
+    panArea.zoomAbs(0, 0, 0.2);
+    panArea.zoomAbs((window.innerWidth / 2) - ($('.zoomable').width() / 2), (window.innerHeight / 2) - ($('.zoomable').height() / 2), 0.2);
 
     // select pan area and set og x and y pos
     let $touchArea = $('.zoomable'),
@@ -224,6 +250,8 @@ $(document).ready(function() {
 
         // on click, show the guide modal to progress 
         $('#continueTour').click(function(){
+            // zoom out the map
+             panArea.smoothZoom(parseInt(window.innerWidth/2) , parseInt(window.innerHeight/2) , 0)
             $('#guide').modal('show')
         })
 
@@ -298,14 +326,14 @@ Pace.on("done", () => {
         })
     }
 
-    // if there are no touches 3 seconds after loading,
-    // assume the user is not using touch 
+    //if there are no touches 5 seconds after loading,
+    //assume the user is not using touch 
     setTimeout(function(){
         if (!userTouched) {
             touch = false
             $('.zoomable').css('pointer-events', 'none')
         }
-    }, 3000)
+    }, 5000)
 
     // disable Pace
     Pace.options = {
@@ -403,18 +431,12 @@ function goToRevisedPage() {
 }
 
 
-// add iframe on point click if we are showing frames
+// // add iframe on point click if we are showing frames
 $('.pulse').click(function (e) {
     let slug = $(this).children().first().attr('id')
     let last = '?'
     if (guide) {
         last = last + '&guide=true'
-    }
-    if (window.innerWidth <= 500) {
-        last = last + '&ios-sml=true'
-    }
-    if (window.innerWidth == 768) {
-        last = last + '&ios-md=true'
     }
     if (!$('.int-' + slug).children().first().is('iframe')){
          $('.int-' + slug).append('<iframe src="details/' + slug + last +'" class="rounded details-frame" ></iframe>')
@@ -444,6 +466,17 @@ function incrementStep() {
         } else {
             $(this).fadeIn(600)
             $(this).css('animation', 'pulse 2s infinite')
+
+            // get client x and y of point 
+            let pos = $(this)[0].getBoundingClientRect();
+
+            let cx = pos.left + pos.width/2
+            let cy = pos.top + pos.height/2
+
+
+            let multiplier = 2.2;
+            panArea.smoothZoom(cx, cy, multiplier);
+
             //$($(this).children().first()[0]).tooltip('show')
         }
     })
@@ -478,6 +511,11 @@ function incrementStep() {
 
         // add an event listener for the close of the target modal 
         $('.popup-' + target).on('hidden.bs.modal', function (e) {
+            //let pos = $('#magnolia-grove')[0].getBoundingClientRect()
+            //let p = panArea.getTransform()
+            //panArea.smoothZoom(parseInt(window.innerWidth/2 + p.x / p.scale) , parseInt(window.innerHeight/2 + p.y/p.scale) , 0)
+            panArea.smoothZoom(parseInt(window.innerWidth/2) , parseInt(window.innerHeight/2) , 0)
+          // panArea.smoothZoom(pos.x, pos.y, 0)
             $('#guide').modal('show')
             // remove event listener when done 
             $('.popup-' + target).off()
@@ -487,7 +525,7 @@ function incrementStep() {
     setTimeout(function(){
         // show the tooltip
         $('#' + target).tooltip('show')
-    }, 500)
+    }, 1000)
     
 }
 
@@ -535,7 +573,21 @@ function doneWithTour() {
     window.history.replaceState('', '', updateURLParameter(window.location.href, 'question-guide', 'false'));
 }
 
+// function centerMap() {
 
+//     let x = $('.zoomable').width();
+//     let y = $('.zoomable').height();
+//     let top = (window.innerWidth - x) / 2
+//     let left = (window.innerHeight - y) / 2
+
+//     let matrix = $('.zoomable').first().css('transform')
+//     let curLeft = matrix.split('matrix(')[1].split(', ')[4]
+//     let curTop = matrix.split('matrix(')[1].split(', ')[5]
+
+//     matrix = matrix.replace(curLeft, left.toString())
+//     matrix = matrix.replace(curTop, top.toString())
+
+// }
 
 
 
