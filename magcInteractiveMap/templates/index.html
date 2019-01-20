@@ -6,61 +6,253 @@
 <style type="text/css">
  body {
     font-family: 'Chivo';
-    background-color: #afafaf;
+    background-color: #dde5d3;
+    position: relative;
+    min-height: 100vh;
 }
-.bg-img {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  left: 40%;
-  background: url("{% static "cover.jpg"%}") center center no-repeat;
-  background-size: cover;
+
+a {
+  color: #dde5d3;
+}
+
+a:hover {
+  color: #dde5d3;
+  text-decoration: none;
 }
 html, body {
   width: 100%;
   height: 100%;
   color: #4B577D;
+  overflow-x: hidden;
+/*  overflow: hidden;*/
+}
+
+#site-heading-1 {
+
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  z-index: 2;
+  max-width: 75px;
+  font-size: 1.3rem;
+}
+/*#site-heading-2 {
+  color: #a7a7a7;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+}
+*/
+
+.questions-section {
+  height: 70vh;
+}
+
+@media (min-width: 576px) {
+  .questions-section {
+    height: 55vh;
+  }
+  
+}
+.desc-panel {
+  position: relative;
+    width: 350px;
+    height: 310px;
+    background-color: #d8d8d2DD;
+    padding: 30px;
+    margin-bottom: 40px;
+    z-index: 200;
 }
 
 i {
     margin-right: 10px;
 }
 
+h1 {
+  font-family: 'Berthold Akzidenz Grotesk Extended'; 
+  color: #4B577D;
+}
+
+p {
+  max-width: 320px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.dec-point {
+  position: absolute;
+  border-radius: 50%;
+  z-index: 2;
+  width: 10vw;
+  height: 10vw;
+  background-color: rgb(219, 143, 118);
+}
+
+.tree {
+  position: absolute;
+  background-color: #c1cbb3; 
+  border-radius: 50%
+}
+
+#trees1 {
+  width: 70vh;
+  height: 70vh;
+  bottom: -25vh;
+  right: -20vh;
+}
+
+#trees2 {
+  width: 40vh;
+  height: 40vh;
+  bottom: -15vh;
+  right: 25vw;
+}
+
+#trees3 {
+  width: 60vh;
+  height: 60vh;
+  bottom: -30vh;
+  left: -20vh;
+}
+
+#trees4 {
+  width: 50vh;
+  height: 50vh;
+  top: -30vh;
+  left: -15vh;
+}
+
+#question {
+  text-align: center;
+  max-width: 90vw;
+  position: absolute;
+  top: 20vh;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+}
+
+/*.buttons-section {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: 40vh;
+ background-color: #afafaf;
+  background-color: #c1cbb3;
+}*/
+
 </style>
-<script src="https://cdn.jsdelivr.net/gh/cferdinandi/smooth-scroll@14.0.0/dist/smooth-scroll.polyfills.min.js"></script>
 {% endblock %}
 
 {% block content %}
-    <div class="bg-img"></div>
-    
-    <div class="jumbotron-fluid" style="position: absolute; top: 10%; width: 100vw;" >
-        <div class="container" style="padding: 25px; min-width: 85%;">
-        <div class="logo-title" style="max-width:150px;">
-            <h1 style="font-family: 'Berthold Akzidenz Grotesk Extended'; color: white;" >marin art & garden center</h1>
-        </div>
-        <h1 style="margin-bottom: 40px; color:#4B577D;">interactive map</h1>
-        <h5 style="margin-bottom: 40px; max-width: 350px; color: #4B577D; display: block">Learn about the history and unique features of the Marin Art & Garden Center </h5>
-      <!--  <a href="#using-the-map"> -->
 
-            <button 
-                class="btn shadow" 
-                style="background-color:#4B577D; color: white;padding: 15px;" 
-                onclick="window.location.href='/map?demo=True&question-guide=True'">Take a tour &rarr;</button>
+        <h1 id="site-heading-1"><a href="https://magc.org?source=map">marin art & garden center</a></h1>
+      <!--   <h2 id="site-heading-2">interactive map</h2> -->
 
-                <button 
-                class="btn shadow" 
-                style="background-color:#d5d7df; color: black;padding: 15px;" 
-                onclick="window.location.href='/map?demo=True'">Explore the map </button>
-     <!--   </a> -->
+        <div class="dec-point"></div>
+        <div class="dec-point"></div>
+        <div class="dec-point"></div>
+
+        <div id="trees1" class="tree"></div>
+        <div id="trees2" class="tree"></div>
+        <div id="trees3" class="tree"></div>
+        <div id="trees4" class="tree"></div>
+
+        <div class="questions-section">
+          <h1 id="question"></h1>
         </div>
 
-    </div>
+        <div class="buttons-section" style="width: 100vw;">
+          <div class="container" >
+            <div class="row">
+              <div class="col-sm-12 col-md-6 col-lg-6" align="center">
+                <div class="desc-panel rounded">
+                  <h2>Take a Tour</h2>
+                  <p>Get answers to your questions. Explore the MAGC grounds through a curated tour of the many notable historic structures and gardens.</p>
+                   <button 
+                      class="btn shadow" 
+                      style="background-color:#4B577D; color: white;padding: 15px;" 
+                      onclick="window.location.href='/map?demo=True&question-guide=True'">Take a tour &rarr;
+                    </button>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6 col-lg-6" align="center">
+                <div class="desc-panel rounded">
+                  <h2>Explore Yourself</h2>
+                  <p>Customize your map to include just the topics that interest you. Combine topics such as 'Gardens' and 'Buildings' to see how MAGC's features intersect.</p>
+                    <button 
+                        class="btn shadow" 
+                        style="background-color:#4B577D; color: white;padding: 15px;" 
+                        onclick="window.location.href='/map?demo=True'">Explore Yourself &rarr;
+                      </button>
+                  
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        </div>
 
 {% endblock %}
 
 {% block scripts%}
+{% load helpers %}
+
 <script type="text/javascript">
-var scroll = new SmoothScroll('a[href*="#"]', {speed: 1000});
+
+  let locationsText = {{ locationsText | js }}
+  let locationsTextJSON = JSON.parse(locationsText)
+
+  let high = '15vh'
+  let mid = '10vh'
+  let low = '5vh'
+
+  if (window.innerWidth >= 400) {
+    high = '25vh'
+    mid = '20vh'
+    low = '15vh'
+  }
+ 
+
+  let i = 1;
+  let rangeX = {min: -5, max: 105}
+  let rangeY = {min: -5, max: 55}
+
+   changeQuestion(0);
+
+  setInterval(function(){
+    changeQuestion(i)
+    i++;
+    if (i >= locationsTextJSON.length){
+      i = 0
+    } 
+  }, 3000)
+
+  
+
+  function changeQuestion(i){
+
+    $('.dec-point').each(function(){
+
+      let randX =( Math.floor(Math.random() * rangeX.max) + rangeX.min ).toString() + 'vw'
+      let randY = (Math.floor(Math.random() * rangeY.max) + rangeY.min ).toString() + 'vh'
+      $(this).animate({top: randY, left: randX}, {duration: 1600, queue: false})
+      
+    })
+
+    $('#question').animate({top: high, opacity: 0}, 800, function(){
+
+        $('#question').html(locationsTextJSON[i].fields.text)
+        $('#question').css('top', low)
+
+        $('#question').animate({top: mid, opacity: 1}, 800)
+      })
+  }
+
+  
+
 </script>
 
 {% endblock %}
