@@ -37,7 +37,7 @@ SECRET_KEY = config('SECRET_KEY')
 #DEBUG = True
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ['magc-interactive.herokuapp.com', 'map.magc.org', 'localhost']
+ALLOWED_HOSTS = ['magc-interactive.herokuapp.com', 'map.magc.org', 'localhost', 'interactive.magc.org']
 
 # Application definition
 
