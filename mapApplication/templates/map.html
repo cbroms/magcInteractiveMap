@@ -1,8 +1,7 @@
 {% extends 'base.html' %} 
 {% block head_title %}Interactive Map{% endblock %}
+
 {% block head %}
-
-
 <style type="text/css" media="screen">
 body, html {
     position: fixed;
@@ -18,12 +17,10 @@ body, html {
 <script type="text/javascript" src="{% static "pace.min.js" %}"></script>
 <link rel="stylesheet" type="text/css" href="{% static "pace.css" %}">
 <script type="text/javascript" src="{% static "inobounce.min.js" %}"></script>
-
 <script type="text/javascript">
 function closeDetails() {
     $('.popup').modal('hide')
 }
-
 </script>
 {% endblock %}
 
@@ -164,25 +161,6 @@ function closeDetails() {
         <button class="btn shadow demo-button" style="background-color:#4B577D; color: white;padding: 15px;" onclick="goToRevisedPage()">Apply &rarr;</button>
         </div>
 
-      <!--   <div class="container rounded tags-container">
-            <h5>Help</h5>
-            <hr>    
-            <button type="button" class="btn btn-block" 
-                    id="using-the-map"
-                    data-toggle="button" 
-                    aria-pressed="false"
-                    style="background-color:#4B577D33;"
-                    > Using the Map →
-                </button>
-                <button type="button" class="btn btn-block" 
-                    data-toggle="button" 
-                    aria-pressed="false"
-                    onclick="window.location.href='https://magc.org/'" 
-                    style="background-color:#4B577D33;"
-                    > MAGC Home →
-                </button>
-        </div> -->
-
         <div class="container rounded tags-container">
             <!-- <h5>More</h5>
             <hr>  -->   
@@ -218,10 +196,8 @@ function closeDetails() {
     </button>
 
     <!-- Map Content -->
-
     <div class="parent" style="overflow: hidden; position: relative;">
     <!-- <div class='zoomable' > -->
-     
             <!-- Map -->
             <div class="zoomable" style='height: {{ map.image.height }}px; width: {{ map.image.width }}px;'>
                 <div class="rotated">
@@ -243,8 +219,6 @@ function closeDetails() {
                 {% endfor %}
                 </div>
             </div>
-
-
                 </div>
             </div>
 
@@ -270,11 +244,6 @@ function closeDetails() {
                 {% endfor %}
                 </div>
             </div>
-
-
-            
-            
-
         </div>
    <!--  </div> -->
     </div>
@@ -324,10 +293,8 @@ function closeDetails() {
             </div>
         </div>
 
-
     {% endif %}
     
-
     <!-- Popup window for credits and about -->
     <div class="modal fade popup-about" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
@@ -339,8 +306,6 @@ function closeDetails() {
                 </div>
             </div>
         </div>
-
-    
 {% endblock %}
 
 {% block scripts%}
@@ -353,11 +318,12 @@ function closeDetails() {
     let points = {{ points | js}};
     let colors = {{ pointColors | js }};
     let open = {{ open | js }};
-    let frames = {{ frames | js }};
     let demo = {{ demo | js }};
     let guide = {{ guide| js }};
     var locations = {{ locations | js }};
     var locationsText = {{ locationsText | js }}
+    let iOS = {{ iOS | js }}
+    let last = {{ last | js }}
  
 </script>
 <script type="text/javascript" src="{% static "map.js" %}"></script>

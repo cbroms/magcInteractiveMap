@@ -22,6 +22,9 @@ def index(request):
         if demo.lower() == 'true':
             showDemo = True
 
+        # get last closed page 
+        last = request.GET.get('last', '')
+
         # determine if we should show the question tour
         guide = request.GET.get('question-guide', '')
 
@@ -89,11 +92,12 @@ def index(request):
                                         'points': pts, 
                                         'pointColors': colors, 
                                         'open': openId,
-                                        'frames': showIFrames,
                                         'demo': showDemo,
                                         'guide': showGuide,
                                         'locations': locations,
-                                        'locationsText': tourText})
+                                        'locationsText': tourText,
+                                        'iOS': request.user_agent.browser.family == 'Mobile Safari',
+                                        'last': last})
 
 def details(request, id):
     pt = get_object_or_404(Point, slug=id)
